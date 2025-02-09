@@ -6,20 +6,24 @@ class PieChartHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PieChart(
-      PieChartData(
-        sections: [
-          PieChartSectionData(
-            value: 20,
-            color: Colors.blue,
-            title: "Income",
-          ),
-          PieChartSectionData(
-            value: 20,
-            color: Colors.red,
-            title: "Expense",
-          ),
-        ],
+    return SizedBox(
+      height: 300, // Set a fixed height
+      width: double.infinity, // Full width
+      child: PieChart(
+        PieChartData(
+          sections: [
+            PieChartSectionData(
+              value: 20,
+              color: Colors.blue,
+              title: "Income",
+            ),
+            PieChartSectionData(
+              value: 20,
+              color: Colors.red,
+              title: "Expense",
+            ),
+          ],
+        ),
       ),
     );
   }

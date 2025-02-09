@@ -9,10 +9,8 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: appBar(),
       body: SafeArea(
-        child: Column(
-          children: [
-            PieChartHome(),
-          ],
+        child: Container(
+          child: PieChartHome(),
         ),
       ),
     );

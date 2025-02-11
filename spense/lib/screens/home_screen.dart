@@ -9,8 +9,35 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: appBar(),
       body: SafeArea(
-        child: Container(
-          child: PieChartHome(),
+        child: Column(
+          children: [
+            Divider(
+              thickness: 0.2, // Adjust thickness for a thinner line
+              color: Colors.black, // Choose the color of the line
+              indent: 0, // Set the indentation from the start
+              endIndent: 0, // Set the indentation from the end
+            ),
+            Text(
+              "Net Balance",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: "SpaceMono",
+                  fontWeight: FontWeight.bold),
+            ),
+            PieChartWithLabels(),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text("data"),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );

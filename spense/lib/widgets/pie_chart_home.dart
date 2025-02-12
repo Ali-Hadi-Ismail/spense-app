@@ -1,62 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/cubit/states.dart';
 
 class PieChartWithLabels extends StatelessWidget {
   const PieChartWithLabels({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Creating a list of data points for the chart
-    List<ChartData> chartData = [
-      ChartData("Income", 100, Colors.green), // green border for Income
-      ChartData("Expense", 10, Colors.red), // red border for Expense
-    ];
-    int totalPrice = 110 - 10;
-    return SizedBox(
-      height: 400,
-      width: double.infinity,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SfCircularChart(
-            series: <CircularSeries>[
-              DoughnutSeries<ChartData, String>(
-                dataSource: chartData,
-                animationDuration: 1000,
-                enableTooltip: true,
-                xValueMapper: (ChartData data, _) => data.label,
-                yValueMapper: (ChartData data, _) => data.value,
-                pointColorMapper: (ChartData data, _) => data.color,
-                innerRadius: '80%',
-                dataLabelMapper: (ChartData data, _) {
-                  double percentage = (data.value / 100) * 100;
-                  return '${data.label}: ${percentage.toStringAsFixed(1)}%';
-                },
-                dataLabelSettings: DataLabelSettings(
-                  isVisible: true,
-                  labelPosition: ChartDataLabelPosition.outside,
-                  alignment: ChartAlignment.near,
-                  borderColor:
-                      Colors.grey, // Dynamic color assignment for label border
-                  borderRadius: 20,
-                  borderWidth: 1.2,
-                  connectorLineSettings: ConnectorLineSettings(
-                    length: "20%",
-                    type: ConnectorType.curve,
+    return BlocBuilder<TransactionCubit, TransactionStates>(
+      builder: (context, state) {
+        // Get the latest values from the Cubit
+        var cubit = TransactionCubit.get(context);
+        int income = cubit.getIncome();
+        int expense = cubit.getExpense();
+        int totalPrice = cubit.totalPrice;
+
+        List<ChartData> chartData = [
+          ChartData("Income", income.toDouble(), Colors.green),
+          ChartData("Expense", expense.toDouble(), Colors.red),
+        ];
+
+        return SizedBox(
+          height: 350,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SfCircularChart(
+                series: <CircularSeries>[
+                  DoughnutSeries<ChartData, String>(
+                    dataSource: chartData,
+                    animationDuration: 500,
+                    enableTooltip: true,
+                    xValueMapper: (ChartData data, _) => data.label,
+                    yValueMapper: (ChartData data, _) => data.value,
+                    pointColorMapper: (ChartData data, _) => data.color,
+                    innerRadius: '75%', // Adjusted for better space
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
+                      labelPosition: ChartDataLabelPosition.outside,
+                      alignment: ChartAlignment.center,
+                      connectorLineSettings: ConnectorLineSettings(
+                        length: "10%",
+                        type: ConnectorType.curve,
+                      ),
+                    ),
+                    dataLabelMapper: (ChartData data, _) {
+                      int percentage =
+                          ((data.value / (income + expense)) * 100).toInt();
+                      return '${percentage}%';
+                    },
                   ),
-                ),
+                ],
               ),
+              Text(
+                "$totalPrice\$",
+                style: TextStyle(
+                  fontSize: 35,
+                  fontFamily: "SpaceMono",
+                  color: (totalPrice >= 0 ? Colors.green.shade600 : Colors.red),
+                ),
+              )
             ],
           ),
-          Text(
-            "$totalPrice \$",
-            style: TextStyle(
-              fontSize: 20,
-              fontFamily: "SpaceMono",
-            ),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }

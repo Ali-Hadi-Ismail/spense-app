@@ -20,7 +20,7 @@ class RecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('MM-dd-yyyy hh:mm').format(date);
+    String formattedDate = DateFormat('MM-dd-yyyy hh:mm ').format(date);
     return Card(
       elevation: 10,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

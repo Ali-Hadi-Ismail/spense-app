@@ -5,6 +5,7 @@ import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:spense/cubit/states.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 import 'package:spense/widgets/pie_chart_home.dart';
+import 'package:spense/widgets/record_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -39,7 +40,6 @@ class HomeScreen extends StatelessWidget {
                         fontFamily: "SpaceMono",
                         fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 20),
                   SafeArea(child: PieChartWithLabels()),
                   SizedBox(
                     height: 10,
@@ -115,7 +115,54 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    child: Card(
+                      elevation: 10,
+                      color: Colors.white70,
+                      child: Column(
+                        children: [
+                          Text(
+                            "Record History",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: "Spacemono",
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                RecordCard(
+                                  category: "Personal Care",
+                                  date: DateTime.now(),
+                                  title: "Hair cut",
+                                  id: "21234124",
+                                  value: 10,
+                                  type: "Expense",
+                                ),
+                                // Add some space between cards
+                                RecordCard(
+                                  category: "Personal Care",
+                                  date: DateTime.now(),
+                                  title: "Hair cut",
+                                  id: "21234124",
+                                  value: 10,
+                                  type: "Expense",
+                                ),
+                                // Add more RecordCards here as needed
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -10,7 +10,20 @@ class TransactionCubit extends Cubit<TransactionStates> {
 
   int income = 2;
   int expense = 10;
-  List<Transaction> transaction = [];
+  List<Transaction> transaction = [
+    Transaction(
+        value: 10,
+        category: "Personal Care",
+        title: "Hair Cut",
+        date: DateTime.now(),
+        type: "Expense"),
+    Transaction(
+        value: 50,
+        category: "Freelance",
+        title: "Spense Project",
+        date: DateTime.now(),
+        type: "Expense"),
+  ];
 
   int get totalPrice => income - expense;
 

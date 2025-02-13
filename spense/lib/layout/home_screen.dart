@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:spense/cubit/states.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/layout/add_transaction.dart';
 import 'package:spense/widgets/pie_chart_home.dart';
 import 'package:spense/widgets/record_card.dart';
 
@@ -41,22 +42,22 @@ class HomeScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   SafeArea(child: PieChartWithLabels()),
-                  SizedBox(
-                    height: 10,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      // Income Button
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
+
                           shadowColor: Colors.green,
                           elevation: 6,
                           shape: RoundedRectangleBorder(
                             borderRadius:
                                 BorderRadius.circular(20), // Rounded corners
                           ),
+
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12), // Adds spacing
                         ),
@@ -78,7 +79,12 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       FloatingActionButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddTransaction()));
+                        },
                         backgroundColor: Colors.grey.shade100,
                         elevation: 7,
                         child: Icon(Icons.add),
@@ -116,50 +122,52 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 21,
-                  ),
+                  SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
                     child: Card(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                       elevation: 10,
-                      color: Colors.white70,
-                      child: Column(
-                        children: [
-                          Text(
-                            "Record History",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: "Spacemono",
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                RecordCard(
-                                  category: "Personal Care",
-                                  date: DateTime.now(),
-                                  title: "Hair cut",
-                                  id: "21234124",
-                                  value: 10,
-                                  type: "Expense",
-                                ),
-                                // Add some space between cards
-                                RecordCard(
-                                  category: "Personal Care",
-                                  date: DateTime.now(),
-                                  title: "Hair cut",
-                                  id: "21234124",
-                                  value: 10,
-                                  type: "Expense",
-                                ),
-                                // Add more RecordCards here as needed
-                              ],
+                      color: Colors.white70.withOpacity(0.7),
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Record History",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontFamily: "Spacemono",
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ),
-                        ],
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  RecordCard(
+                                    category: "Personal Care",
+                                    date: DateTime.now(),
+                                    title: "Hair cut",
+                                    id: "21234124",
+                                    value: 10,
+                                    type: "Expense",
+                                  ),
+                                  // Add some space between cards
+                                  RecordCard(
+                                    category: "Personal Care",
+                                    date: DateTime.now(),
+                                    title: "Hair cut",
+                                    id: "21234124",
+                                    value: 10,
+                                    type: "Expense",
+                                  ),
+                                  // Add more RecordCards here as needed
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -1,7 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
+import 'package:spense/cubit/states.dart';
+import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/models/transaction.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({super.key});
@@ -20,241 +24,324 @@ class _AddTransactionState extends State<AddTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Add Transaction",
-          style: TextStyle(fontFamily: "Spacemono"),
-        ),
-        backgroundColor: isExpense
-            ? Colors.red.shade400 // Green for Income
-            : Colors.green.shade400, // Red for Expense
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // Goes back to the previous screen
-          },
-        ),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Center(
-          child: Container(
-            height: 550,
-            width: 340,
-            decoration: BoxDecoration(
-              gradient: isExpense
-                  ? LinearGradient(
-                      colors: [Colors.red.shade100, Colors.red.shade300],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
-                  : LinearGradient(
-                      colors: [Colors.green.shade100, Colors.green.shade300],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-              borderRadius: BorderRadius.all(Radius.circular(20)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 2,
-                  blurRadius: 10,
-                  offset: Offset(0, 3),
-                ),
-              ],
+    return BlocConsumer<TransactionCubit, TransactionStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        TransactionCubit cubit = TransactionCubit.get(context);
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Add Transaction",
+              style: TextStyle(fontFamily: "Spacemono"),
             ),
-            padding: EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  // Type of transaction Switcher
-
-                  SizedBox(height: 20),
-
-                  const Text(
-                    "Fill Transaction Info",
-                    style: TextStyle(
-                      fontFamily: "Spacemono",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+            backgroundColor: isExpense
+                ? Colors.red.shade400 // Green for Income
+                : Colors.green.shade400, // Red for Expense
+            elevation: 10,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context); // Goes back to the previous screen
+              },
+            ),
+          ),
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(
+              child: Container(
+                height: 550,
+                width: 340,
+                decoration: BoxDecoration(
+                  gradient: isExpense
+                      ? LinearGradient(
+                          colors: [Colors.red.shade100, Colors.red.shade300],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        )
+                      : LinearGradient(
+                          colors: [
+                            Colors.green.shade100,
+                            Colors.green.shade300
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
+                  ],
+                ),
+                padding: EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        "Type of transaction:",
-                        style: TextStyle(
-                          fontFamily: "Spacemono",
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Spacer(),
-                      Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          shadowColor: (isExpense) ? Colors.red : Colors.green,
-                          elevation: 8,
-                          child: typeSwitcher()),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  // Title TextFormField
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        "Title     :",
-                        style: TextStyle(
-                          fontFamily: "Spacemono",
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          style:
-                              TextStyle(fontSize: 12, fontFamily: "Spacemono"),
-                          controller: _titleController,
-                          decoration: InputDecoration(
-                            hintText: "Enter title",
-                            hintStyle: TextStyle(
-                              fontFamily: "monospace",
-                              fontSize: 10,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-
-                  // Categories TextFormField
-                  Row(
-                    children: [
-                      Text(
-                        "Categories:",
-                        style: TextStyle(
-                          fontFamily: "Spacemono",
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          style:
-                              TextStyle(fontSize: 12, fontFamily: "Spacemono"),
-                          controller: _categoriesController,
-                          decoration: InputDecoration(
-                            hintText: "Enter categories",
-                            hintStyle: TextStyle(
+                      const SizedBox(height: 20),
+                      fillTransactionText(),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Type of transaction:",
+                            style: TextStyle(
                               fontFamily: "Spacemono",
                               fontSize: 12,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
+                          Spacer(),
+                          Material(
+                              color: Colors.transparent,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                              shadowColor:
+                                  (isExpense) ? Colors.red : Colors.green,
+                              elevation: 8,
+                              child: typeSwitcher()),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      titleInput(),
+                      const SizedBox(height: 20),
+                      categoryInput(),
+                      const SizedBox(height: 20),
+                      valueInput(),
+                      const SizedBox(height: 20),
+                      currencyInput(),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 7,
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                            ),
+                            child: const Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  fontFamily: "Spacemono", fontSize: 14),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              int value;
+                              if (currency == "USD") {
+                                value = int.parse(_valueController.text);
+                              } else {
+                                value =
+                                    (int.parse(_valueController.text) / 89000)
+                                        .toInt();
+                              }
 
-                  // Value with Dollar Sign (Inside Text Field)
-                  Row(
-                    children: [
-                      Text(
-                        "Value     :",
-                        style: TextStyle(
-                          fontFamily: "Spacemono",
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          style:
-                              TextStyle(fontSize: 12, fontFamily: "Spacemono"),
-                          controller: _valueController,
-                          decoration: InputDecoration(
-                            hintText: "Enter value",
-                            hintStyle: TextStyle(
-                              fontFamily: "Spacemono",
-                              fontSize: 12,
-                            ),
-                            prefixText:
-                                '\$', // Dollar sign inside the text field
-                            prefixStyle: TextStyle(
-                              fontFamily: "Spacemono",
-                              fontSize: 14,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                              Transaction transactionToBeAdded = Transaction(
+                                  id: "a",
+                                  value: value,
+                                  category: _categoriesController.text,
+                                  title: _titleController.text,
+                                  date: DateTime.now(),
+                                  type: (isExpense) ? "Expense" : "Income");
 
-                  // Currency Dropdown (Outside Text Field)
-                  Row(
-                    children: [
-                      Text(
-                        "Currency   :",
-                        style: TextStyle(
-                          fontFamily: "Spacemono",
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          value: currency,
-                          items: currencyOptions.map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              currency = newValue;
-                            });
-                          },
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              cubit.addTransaction(
+                                  transactionToBeAdded); // Use the addTransaction method
+
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              elevation: 7,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                            ),
+                            child: const Text(
+                              "Accept",
+                              style: TextStyle(
+                                fontFamily: "Spacemono",
+                                fontSize: 14,
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        ],
+                      )
                     ],
                   ),
-                ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Row currencyInput() {
+    return Row(
+      children: [
+        const Text(
+          "Currency  :",
+          style: TextStyle(
+            fontFamily: "Spacemono",
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: currency,
+            items: currencyOptions.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              setState(() {
+                currency = newValue;
+              });
+            },
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  Row valueInput() {
+    return Row(
+      children: [
+        const Text(
+          "Value     :",
+          style: TextStyle(
+            fontFamily: "Spacemono",
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            style: const TextStyle(fontSize: 12, fontFamily: "Spacemono"),
+            controller: _valueController,
+            decoration: InputDecoration(
+              hintText: "Enter value",
+              hintStyle: const TextStyle(
+                fontFamily: "Spacemono",
+                fontSize: 12,
+              ),
+              prefixStyle: const TextStyle(
+                fontFamily: "Spacemono",
+                fontSize: 14,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row categoryInput() {
+    return Row(
+      children: [
+        const Text(
+          "Categories:",
+          style: TextStyle(
+            fontFamily: "Spacemono",
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            style: const TextStyle(fontSize: 12, fontFamily: "Spacemono"),
+            controller: _categoriesController,
+            decoration: InputDecoration(
+              hintText: "Enter categories",
+              hintStyle: const TextStyle(
+                fontFamily: "Spacemono",
+                fontSize: 12,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row titleInput() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        const Text(
+          "Title     :",
+          style: TextStyle(
+            fontFamily: "Spacemono",
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: TextFormField(
+            style: const TextStyle(fontSize: 12, fontFamily: "Spacemono"),
+            controller: _titleController,
+            decoration: InputDecoration(
+              hintText: "Enter title",
+              hintStyle: const TextStyle(
+                fontFamily: "monospace",
+                fontSize: 10,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Text fillTransactionText() {
+    return const Text(
+      "Fill Transaction Info",
+      style: TextStyle(
+        fontFamily: "Spacemono",
+        fontWeight: FontWeight.bold,
+        fontSize: 18,
       ),
     );
   }

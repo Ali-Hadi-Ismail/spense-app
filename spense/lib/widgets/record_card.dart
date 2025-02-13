@@ -78,13 +78,15 @@ class RecordCard extends StatelessWidget {
             const SizedBox(height: 3),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Text("Type                 : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("Expense",
+                Text(type,
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Colors.red)), // Example type
+                        color: (type == "Expense")
+                            ? Colors.red
+                            : Colors.green)), // Example type
               ],
             ),
           ],

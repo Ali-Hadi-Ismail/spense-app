@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
@@ -55,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Text(
                             "Income: ${cubit.income} ",
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 16,
                                 fontFamily: "Spacemono",
                                 color: Colors.white,
@@ -148,8 +149,86 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          drawer: Drawer(
+            elevation: 20,
+            shadowColor: Colors.green,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30),
+                bottomRight: Radius.circular(1000),
+              ),
+            ),
+            child: Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFFE6FFE6), // Very Light Green
+                    Color(0xFFCCFFCC), // Softer Green
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: ListView(
+                children: [
+                  Container(
+                    height: 100,
+                    child: DrawerHeader(
+                      child: Text(
+                        "Spense",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                          fontFamily: 'SpaceMono',
+                        ),
+                      ),
+                    ),
+                  ),
+                  DrawerListLite("Risk Assessment Reports",
+                      Icons.align_vertical_bottom_outlined),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DrawerListLite(
+                      "Economic Reports", Icons.account_balance_outlined),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DrawerListLite("Financial Statements", Icons.savings),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DrawerListLite("Setting", Icons.settings),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  DrawerListLite("About Us", FontAwesomeIcons.userGroup),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
+    );
+  }
+
+  ListTile DrawerListLite(String text, IconData listIcon) {
+    return ListTile(
+      trailing: Icon(listIcon, color: Colors.grey[800]),
+      title: Text(
+        text,
+        style: TextStyle(
+          fontSize: 20,
+          fontFamily: "SpaceMono",
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 

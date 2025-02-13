@@ -1,6 +1,6 @@
 name: spense
 description: "A new Flutter project."
-publish_to: "none" # Remove this line if you want to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -29,13 +29,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Fonts section to include Space Mono
   fonts:
     - family: SpaceMono
       fonts:
         - asset: assets/fonts/SpaceMono-Regular.ttf
-        - asset: assets/fonts/SpaceMono-Bold.ttf # Include both regular and bold versions if needed
+        - asset: assets/fonts/SpaceMono-Bold.ttf
 
-  # Assets section for images, etc. If you want to add any image assets, include them here.
   assets:
-    - assets/images/ # For images like icons, backgrounds, etc.
+    - assets/images/

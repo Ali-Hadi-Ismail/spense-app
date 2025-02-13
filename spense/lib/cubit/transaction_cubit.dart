@@ -50,7 +50,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
       'spense.db',
       version: 1,
       onCreate: (database, version) {
-        // id      int
+        // id    int
         // category string
         // value int
         // title string
@@ -79,3 +79,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
   void deleteDatabase() {}
   void updateDatabase() {}
 }
+
+
+//Crud operation 
+//

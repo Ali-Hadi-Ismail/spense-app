@@ -27,9 +27,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// 1 Create Database 
-// 2 open database
-// 3 insert to database 
-// 4 read from database
-// 5 update database
-// 6 delete from database
+/*  1 - cubit blocProvider vs blocConsumer vs blocBuilder 
+    2 - fl_chart  syncfunction chart 
+    3 - upgrading flutter SDK and graddel 
+    4 - sqflite in cubit aliasing 
+    5 - chart label 
+*/

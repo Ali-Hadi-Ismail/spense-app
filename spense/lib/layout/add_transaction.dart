@@ -53,7 +53,7 @@ class _AddTransactionState extends State<AddTransaction> {
             height: double.infinity,
             child: Center(
               child: Container(
-                height: 550,
+                height: 575,
                 width: 340,
                 decoration: BoxDecoration(
                   gradient: isExpense
@@ -88,28 +88,7 @@ class _AddTransactionState extends State<AddTransaction> {
                       const SizedBox(height: 20),
                       fillTransactionText(),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Type of transaction:",
-                            style: TextStyle(
-                              fontFamily: "Spacemono",
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Spacer(),
-                          Material(
-                              color: Colors.transparent,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              shadowColor:
-                                  (isExpense) ? Colors.red : Colors.green,
-                              elevation: 8,
-                              child: typeSwitcher()),
-                        ],
-                      ),
+                      typeOfTransactionToggel(),
                       const SizedBox(height: 20),
                       titleInput(),
                       const SizedBox(height: 20),
@@ -119,7 +98,14 @@ class _AddTransactionState extends State<AddTransaction> {
                       const SizedBox(height: 20),
                       currencyInput(),
                       const SizedBox(
-                        height: 50,
+                        height: 30,
+                      ),
+                      Divider(
+                        color: Colors.black38,
+                        thickness: 1,
+                      ),
+                      const SizedBox(
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -193,6 +179,29 @@ class _AddTransactionState extends State<AddTransaction> {
           ),
         );
       },
+    );
+  }
+
+  Row typeOfTransactionToggel() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          "Type of transaction:",
+          style: TextStyle(
+            fontFamily: "Spacemono",
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Spacer(),
+        Material(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            shadowColor: (isExpense) ? Colors.red : Colors.green,
+            elevation: 8,
+            child: typeSwitcher()),
+      ],
     );
   }
 
@@ -348,11 +357,11 @@ class _AddTransactionState extends State<AddTransaction> {
 
   FlutterSwitch typeSwitcher() {
     return FlutterSwitch(
-      width: 100,
+      width: 125,
       height: 40,
-      toggleSize: 30,
+      toggleSize: 29,
       value: isExpense,
-      borderRadius: 20,
+      borderRadius: 18,
       inactiveIcon: Icon(
         FontAwesomeIcons.arrowTrendUp,
         color: Colors.green.shade700,

@@ -45,9 +45,10 @@ class TransactionCubit extends Cubit<TransactionStates> {
 
   int getExpense() => expense;
 
-  void createDatabase() async {
-    var mydatabase = await openDatabase(
-      'spense.db',
+  late Database mydatabase;
+  Future<void> createDatabase() async {
+    mydatabase = await openDatabase(
+      'spernse.db',
       version: 1,
       onCreate: (database, version) {
         // id    int
@@ -75,11 +76,23 @@ class TransactionCubit extends Cubit<TransactionStates> {
     );
   }
 
-  void insertDatabase() {}
+  Future<void> insertDatabase() {
+    // using transaction I can insert database
+    return mydatabase.transaction((txn) async {
+      await txn
+          .rawInsert(
+              'INSERT INTO record(category , value , title ,date ,type) VALUES ("Food","10","Shartouni Sandwish","02-14-2025 12:23","Expense")')
+          .then((value) {
+        print("${value} inserted successfully");
+      }).catchError((error) {
+        print(error.toString());
+      });
+    });
+  }
+
   void deleteDatabase() {}
   void updateDatabase() {}
 }
 
 
 //Crud operation 
-//

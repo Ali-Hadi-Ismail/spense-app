@@ -4,30 +4,34 @@ import 'package:spense/layout/home_screen.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const Spense());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class Spense extends StatelessWidget {
+  const Spense({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TransactionCubit()..createDatabase(),
-      child: MaterialApp(
+      child: const MaterialApp(
         title: 'Spense',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
         home: HomeScreen(),
       ),
     );
   }
 }
 
-/*  1 - cubit blocProvider vs blocConsumer vs blocBuilder 
+/*  
+
+  Notes :
+    
+
+
+
+  Difficulties: 
+    1 - cubit blocProvider vs blocConsumer vs blocBuilder 
     2 - fl_chart  syncfunction chart 
     3 - upgrading flutter SDK and graddel 
     4 - sqflite in cubit aliasing 

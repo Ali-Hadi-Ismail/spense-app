@@ -110,25 +110,7 @@ class _AddTransactionState extends State<AddTransaction> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              elevation: 7,
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                            ),
-                            child: const Text(
-                              "Cancel",
-                              style: TextStyle(
-                                  fontFamily: "Spacemono", fontSize: 14),
-                            ),
-                          ),
+                          cancelButton(context),
                           ElevatedButton(
                             onPressed: () {
                               int value;
@@ -139,6 +121,8 @@ class _AddTransactionState extends State<AddTransaction> {
                                     (int.parse(_valueController.text) / 89000)
                                         .toInt();
                               }
+
+                              cubit.insertDatabase();
 
                               Transaction transactionToBeAdded = Transaction(
                                   id: "a",
@@ -179,6 +163,26 @@ class _AddTransactionState extends State<AddTransaction> {
           ),
         );
       },
+    );
+  }
+
+  ElevatedButton cancelButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      style: ElevatedButton.styleFrom(
+        elevation: 7,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      ),
+      child: const Text(
+        "Cancel",
+        style: TextStyle(fontFamily: "Spacemono", fontSize: 14),
+      ),
     );
   }
 

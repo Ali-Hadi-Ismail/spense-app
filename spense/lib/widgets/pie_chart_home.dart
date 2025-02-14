@@ -10,62 +10,75 @@ class PieChartWithLabels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TransactionCubit, TransactionStates>(
+      buildWhen: (prev, curr) {
+        if (curr is! TransactionUpdated) return false;
+        if (prev is! TransactionUpdated) return true;
+        return prev.income != curr.income || prev.expense != curr.expense;
+      },
       builder: (context, state) {
-        // Get the latest values from the Cubit
-        var cubit = TransactionCubit.get(context);
-        int income = cubit.getIncome();
-        int expense = cubit.getExpense();
-        int totalPrice = cubit.totalPrice;
+        if (state is TransactionUpdated) {
+          var cubit = TransactionCubit.get(context);
 
-        List<ChartData> chartData = [
-          ChartData("Income", income.toDouble(), Colors.green),
-          ChartData("Expense", expense.toDouble(), Colors.red),
-        ];
+          int income = state.income;
+          int expense = state.expense;
+          int totalPrice = state.totalPrice;
 
-        return SizedBox(
-          height: 350,
-          width: double.infinity,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SfCircularChart(
-                series: <CircularSeries>[
-                  DoughnutSeries<ChartData, String>(
-                    dataSource: chartData,
-                    animationDuration: 500,
-                    enableTooltip: true,
-                    xValueMapper: (ChartData data, _) => data.label,
-                    yValueMapper: (ChartData data, _) => data.value,
-                    pointColorMapper: (ChartData data, _) => data.color,
-                    innerRadius: '75%', // Adjusted for better space
-                    dataLabelSettings: DataLabelSettings(
-                      isVisible: true,
-                      labelPosition: ChartDataLabelPosition.outside,
-                      alignment: ChartAlignment.center,
-                      connectorLineSettings: ConnectorLineSettings(
-                        length: "10%",
-                        type: ConnectorType.curve,
+          List<ChartData> chartData = [
+            ChartData("Income", income, Colors.green),
+            ChartData("Expense", expense, Colors.red),
+          ];
+
+          return SizedBox(
+            height: 350,
+            width: double.infinity,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SfCircularChart(
+                  series: <CircularSeries>[
+                    DoughnutSeries<ChartData, String>(
+                      dataSource: chartData,
+                      animationDuration: 500,
+                      enableTooltip: true,
+                      xValueMapper: (ChartData data, _) => data.label,
+                      yValueMapper: (ChartData data, _) => data.value,
+                      pointColorMapper: (ChartData data, _) => data.color,
+                      innerRadius: '75%', // Adjusted for better space
+                      dataLabelSettings: DataLabelSettings(
+                        isVisible: true,
+                        labelPosition: ChartDataLabelPosition.outside,
+                        alignment: ChartAlignment.center,
+                        connectorLineSettings: ConnectorLineSettings(
+                          length: "10%",
+                          type: ConnectorType.curve,
+                        ),
                       ),
+                      dataLabelMapper: (ChartData data, _) {
+                        if (income + expense == 0) {
+                          return '0%'; // Handle the case where income + expense is 0
+                        }
+                        int percentage =
+                            ((data.value / (income + expense)) * 100).toInt();
+                        return '${percentage}%';
+                      },
                     ),
-                    dataLabelMapper: (ChartData data, _) {
-                      int percentage =
-                          ((data.value / (income + expense)) * 100).toInt();
-                      return '${percentage}%';
-                    },
-                  ),
-                ],
-              ),
-              Text(
-                "$totalPrice\$",
-                style: TextStyle(
-                  fontSize: 35,
-                  fontFamily: "SpaceMono",
-                  color: (totalPrice >= 0 ? Colors.green.shade600 : Colors.red),
+                  ],
                 ),
-              )
-            ],
-          ),
-        );
+                Text(
+                  "$totalPrice\$",
+                  style: TextStyle(
+                    fontSize: 35,
+                    fontFamily: "SpaceMono",
+                    color:
+                        (totalPrice >= 0 ? Colors.green.shade600 : Colors.red),
+                  ),
+                )
+              ],
+            ),
+          );
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }
@@ -73,7 +86,7 @@ class PieChartWithLabels extends StatelessWidget {
 
 class ChartData {
   final String label;
-  final double value;
+  final int value;
   final Color color;
 
   // Constructor with necessary fields

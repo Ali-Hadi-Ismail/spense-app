@@ -3,18 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spense/layout/home_screen.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 
-void main() {
-  runApp(const Spense());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  TransactionCubit transactionCubit = TransactionCubit();
+  await transactionCubit.createDatabase(); // Ensure the database is created
+
+  runApp(MyApp(transactionCubit: transactionCubit));
 }
 
-class Spense extends StatelessWidget {
-  const Spense({super.key});
+class MyApp extends StatelessWidget {
+  final TransactionCubit transactionCubit;
+
+  MyApp({required this.transactionCubit});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TransactionCubit()..createDatabase(),
-      child: const MaterialApp(
+      create: (context) => transactionCubit,
+      child: MaterialApp(
         title: 'Spense',
         debugShowCheckedModeBanner: false,
         home: HomeScreen(),

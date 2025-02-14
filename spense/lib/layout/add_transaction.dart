@@ -100,59 +100,13 @@ class _AddTransactionState extends State<AddTransaction> {
                       const SizedBox(
                         height: 30,
                       ),
-                      Divider(
-                        color: Colors.black38,
-                        thickness: 1,
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      Divider(color: Colors.black38, thickness: 1),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           cancelButton(context),
-                          ElevatedButton(
-                            onPressed: () {
-                              int value;
-                              if (currency == "USD") {
-                                value = int.parse(_valueController.text);
-                              } else {
-                                value =
-                                    (int.parse(_valueController.text) / 89000)
-                                        .toInt();
-                              }
-
-                              cubit.insertDatabase();
-
-                              Transaction transactionToBeAdded = Transaction(
-                                  id: "a",
-                                  value: value,
-                                  category: _categoriesController.text,
-                                  title: _titleController.text,
-                                  date: DateTime.now(),
-                                  type: (isExpense) ? "Expense" : "Income");
-
-                              cubit.addTransaction(
-                                  transactionToBeAdded); // Use the addTransaction method
-
-                              Navigator.pop(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              elevation: 7,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                            ),
-                            child: const Text(
-                              "Accept",
-                              style: TextStyle(
-                                fontFamily: "Spacemono",
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
+                          acceptButton(cubit, context),
                         ],
                       )
                     ],
@@ -163,6 +117,56 @@ class _AddTransactionState extends State<AddTransaction> {
           ),
         );
       },
+    );
+  }
+
+  ElevatedButton acceptButton(TransactionCubit cubit, BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        // using database directly
+        int value;
+        if (currency == "USD") {
+          value = int.parse(_valueController.text);
+        } else {
+          value = (int.parse(_valueController.text) / 89000).toInt();
+        }
+        DateTime now = DateTime.now();
+        String formatedDate = "${now.year}-${now.month}-${now.day}";
+        cubit.insertDatabase(
+            category: _categoriesController.text,
+            value: value,
+            title: _titleController.text,
+            type: (isExpense) ? "Expense" : "Income",
+            date: formatedDate);
+
+        // using cubit
+        Transaction transactionToBeAdded = Transaction(
+            id: "a",
+            value: value,
+            category: _categoriesController.text,
+            title: _titleController.text,
+            date: DateTime.now(),
+            type: (isExpense) ? "Expense" : "Income");
+
+        cubit.addTransaction(
+            transactionToBeAdded); // Use the addTransaction method
+
+        Navigator.pop(context);
+      },
+      style: ElevatedButton.styleFrom(
+        elevation: 7,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      ),
+      child: const Text(
+        "Accept",
+        style: TextStyle(
+          fontFamily: "Spacemono",
+          fontSize: 14,
+        ),
+      ),
     );
   }
 

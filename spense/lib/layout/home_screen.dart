@@ -18,6 +18,15 @@ class HomeScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         TransactionCubit cubit = TransactionCubit.get(context);
+        // Fetch all records when the screen is initialized
+        cubit.getAllRecordFromDatabase(cubit.mydatabase).then((value) {
+          cubit.records = value;
+          cubit.emit(TransactionUpdated(cubit.income, cubit.expense,
+              cubit.totalPrice, cubit.transaction));
+          if (cubit.records.isEmpty) cubit.insertInitialRecords();
+          cubit.calculateIncomeAndExpense();
+        });
+
         return Scaffold(
           appBar: appBar(),
           body: SafeArea(
@@ -142,14 +151,14 @@ class HomeScreen extends StatelessWidget {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: cubit.transaction.map((transaction) {
+                children: cubit.records.map((record) {
                   return RecordCard(
-                    category: transaction.category ?? '',
-                    date: transaction.date,
-                    title: transaction.title ?? '',
-                    id: transaction.id ?? '',
-                    value: transaction.value,
-                    type: transaction.type ?? '',
+                    id: record['id'],
+                    title: record['title'],
+                    date: record['date'],
+                    category: record['category'],
+                    value: record['value'],
+                    type: record['type'],
                   );
                 }).toList(),
               ),

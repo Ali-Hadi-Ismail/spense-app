@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RecordCard extends StatelessWidget {
-  String? id;
+  int id;
   int value;
   String category;
   String title;
-  DateTime date;
+  String date;
   String type;
 
   RecordCard({
-    this.id,
+    required this.id,
     required this.value,
     required this.category,
     required this.title,
@@ -20,7 +20,6 @@ class RecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('MM-dd-yyyy hh:mm ').format(date);
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -47,7 +46,8 @@ class RecordCard extends StatelessWidget {
               children: [
                 Text("Transaction ID : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(id!, style: TextStyle(fontWeight: FontWeight.w500)),
+                Text(id.toString(),
+                    style: TextStyle(fontWeight: FontWeight.w500)),
               ],
             ),
             const SizedBox(height: 3),
@@ -56,7 +56,7 @@ class RecordCard extends StatelessWidget {
               children: [
                 Text("Date                  : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(formattedDate,
+                Text(date,
                     style:
                         TextStyle(fontWeight: FontWeight.w500)), // Example date
               ],

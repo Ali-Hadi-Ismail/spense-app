@@ -76,30 +76,34 @@ class TransactionCubit extends Cubit<TransactionStates> {
   }
 
   Future<void> insertInitialRecords() async {
-    await _dbReadyCompleter.future; // Wait until the database is ready
+    await _dbReadyCompleter.future;
+
     await insertDatabase(
         category: "Salary",
         value: 500,
         title: "Full-time Job",
-        date: "2025-02-14",
+        date: "09:30 15-02-2025",
         type: "Income");
+
     await insertDatabase(
         category: "Freelance",
         value: 200,
         title: "Side Project",
-        date: "2025-02-14",
+        date: "10:00 15-02-2025",
         type: "Income");
+
     await insertDatabase(
         category: "Food",
         value: 50,
         title: "Groceries",
-        date: "2025-02-14",
+        date: "11:30 15-02-2025",
         type: "Expense");
+
     await insertDatabase(
         category: "Transport",
         value: 30,
         title: "Bus Ticket",
-        date: "2025-02-14",
+        date: "12:00 15-02-2025",
         type: "Expense");
   }
 
@@ -120,7 +124,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
   }
 
   Future<List<Map>> getAllRecordFromDatabase(Database database) async {
-    return await database.rawQuery('SELECT * FROM record');
+    return await database.rawQuery('SELECT * FROM record ORDER BY id DESC');
   }
 
   Future<List<Map>> getAllIncomeRecordFromDatabase(Database database) async {
@@ -131,6 +135,16 @@ class TransactionCubit extends Cubit<TransactionStates> {
   Future<List<Map>> getAllExpenseRecordFromDatabase(Database database) async {
     return await database
         .rawQuery('SELECT * FROM record WHERE type = "Expense"');
+  }
+
+  Future<List<Map>> getIncomeRecordByValue(Database database) async {
+    return await database
+        .rawQuery('SELECT * FROM record WHERE type = "Income" ORDER BY value ');
+  }
+
+  Future<List<Map>> getIncomeRecordByDate(Database database) async {
+    return await database
+        .rawQuery('SELECT * FROM record WHERE type = "Income" ORDER BY id ');
   }
 
   Future<void> calculateIncomeAndExpense() async {

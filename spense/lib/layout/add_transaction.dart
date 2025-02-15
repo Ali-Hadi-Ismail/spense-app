@@ -131,7 +131,8 @@ class _AddTransactionState extends State<AddTransaction> {
           value = (int.parse(_valueController.text) / 89000).toInt();
         }
         DateTime now = DateTime.now();
-        String formatedDate = "${now.year}-${now.month}-${now.day}";
+        String formatedDate =
+            "${now.hour}:${now.second}  ${now.year}-${now.month}-${now.day}";
         cubit.insertDatabase(
             category: _categoriesController.text,
             value: value,

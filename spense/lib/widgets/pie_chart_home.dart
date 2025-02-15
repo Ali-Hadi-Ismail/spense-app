@@ -38,7 +38,8 @@ class PieChartWithLabels extends StatelessWidget {
                   series: <CircularSeries>[
                     DoughnutSeries<ChartData, String>(
                       dataSource: chartData,
-                      animationDuration: 500,
+                      animationDuration: 800,
+
                       enableTooltip: true,
                       xValueMapper: (ChartData data, _) => data.label,
                       yValueMapper: (ChartData data, _) => data.value,

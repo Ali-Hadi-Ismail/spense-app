@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     incomeButton(cubit, context),
-                    Container(width: 45, child: addTransactionButton(context)),
+                    addTransactionButton(context),
                     expenseButton(cubit),
                   ],
                 ),
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
 
   Drawer appDrawer() {
     return Drawer(
-      elevation: 20,
+      elevation: 60,
       shadowColor: Colors.black,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -185,7 +185,7 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            "Expense: ${cubit.expense} \$ ",
+            "Expense: ${cubit.expense} \$  ",
             style: const TextStyle(
                 fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
           ),
@@ -202,10 +202,10 @@ class HomeScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const AddTransaction()));
       },
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(20),
       ),
       backgroundColor: Colors.grey.shade100,
-      elevation: 7,
+      elevation: 10,
       child: const Icon(Icons.add),
     );
   }
@@ -229,7 +229,7 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            "Income: ${cubit.income} \$ ",
+            "Income: ${cubit.income} \$  ",
             style: const TextStyle(
                 fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
           ),

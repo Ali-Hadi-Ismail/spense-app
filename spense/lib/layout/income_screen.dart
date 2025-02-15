@@ -18,23 +18,23 @@ int? x;
 
 class _IncomeScreenState extends State<IncomeScreen> {
   @override
+  initState() {
+    TransactionCubit cubit = TransactionCubit.get(context);
+    x = 0;
+    super.initState();
+    cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((value) {
+      cubit.recordsExpense = value;
+      cubit.emit(TransactionUpdated(
+          cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionCubit, TransactionStates>(
       listener: (context, state) {},
       builder: (context, state) {
         TransactionCubit cubit = TransactionCubit.get(context);
-
-        initState() {
-          x = 0;
-          super.initState();
-          cubit.getAllIncomeRecordFromDatabase(cubit.mydatabase).then((value) {
-            cubit.recordsIncome = value;
-            cubit.emit(TransactionUpdated(cubit.income, cubit.expense,
-                cubit.totalPrice, cubit.transaction));
-          }).then((value) {
-            cubit.calculateIncomeAndExpense();
-          });
-        }
 
         return Scaffold(
           appBar: AppBar(
@@ -105,11 +105,35 @@ class _IncomeScreenState extends State<IncomeScreen> {
                           });
                         }),
                     FilterChip(
-                        label: Text("comming soon "), onSelected: (value) {}),
+                        label: Text("By Category"),
+                        onSelected: (value) async {
+                          setState(() {
+                            cubit
+                                .getIncomeRecordByCategory(cubit.mydatabase)
+                                .then((values) {
+                              cubit.recordsIncome = values;
+                            });
+                          });
+                        }),
                   ],
                 ),
               ),
-              incomeDataVisualization(cubit),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: cubit.recordsIncome.length,
+                  itemBuilder: (context, index) {
+                    final record = cubit.recordsIncome[index];
+                    return RecordCard(
+                      id: record['id'],
+                      title: record['title'],
+                      date: record['date'],
+                      category: record['category'],
+                      value: record['value'],
+                      type: record['type'],
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         );

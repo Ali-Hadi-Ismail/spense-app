@@ -132,7 +132,7 @@ class _AddTransactionState extends State<AddTransaction> {
         }
         DateTime now = DateTime.now();
         String formatedDate =
-            "${now.hour}:${now.second}  ${now.year}-${now.month}-${now.day}";
+            "${now.hour}:${now.second}  ${now.second}-${now.month}-${now.year}";
         cubit.insertDatabase(
             category: _categoriesController.text,
             value: value,

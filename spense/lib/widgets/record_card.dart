@@ -35,6 +35,19 @@ class RecordCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Text("Title                : ",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: (type == "Expense")
+                            ? Colors.red
+                            : Colors.green)), // Example type
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 Text("Category          : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text(category, style: TextStyle(fontWeight: FontWeight.w500)),

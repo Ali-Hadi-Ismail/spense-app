@@ -5,6 +5,7 @@ import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:spense/cubit/states.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 import 'package:spense/layout/add_transaction.dart';
+import 'package:spense/layout/expense_screen.dart';
 import 'package:spense/layout/income_screen.dart';
 import 'package:spense/widgets/pie_chart_home.dart';
 import 'package:spense/widgets/record_card.dart';
@@ -51,10 +52,10 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     incomeButton(cubit, context),
                     addTransactionButton(context),
-                    expenseButton(cubit),
+                    expenseButton(cubit, context),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 recordHistoryCard(cubit),
               ],
             ),
@@ -169,9 +170,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  ElevatedButton expenseButton(TransactionCubit cubit) {
+  ElevatedButton expenseButton(TransactionCubit cubit, BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ExpenseScreen()));
+      },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
         shadowColor: Colors.red,

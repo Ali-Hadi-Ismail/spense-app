@@ -1,10 +1,225 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spense/cubit/states.dart';
+import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/models/transaction.dart';
+import 'package:spense/widgets/pie_chart_home.dart';
+import 'package:spense/widgets/record_card.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
-class ExpenseScreen extends StatelessWidget {
+class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
+  State<ExpenseScreen> createState() => _ExpenseScreenState();
+}
+
+int? x;
+
+class _ExpenseScreenState extends State<ExpenseScreen> {
+  @override
+  initState() {
+    TransactionCubit cubit = TransactionCubit.get(context);
+    x = 0;
+    super.initState();
+    cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((value) {
+      cubit.recordsExpense = value;
+      cubit.emit(TransactionUpdated(
+          cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));
+    });
   }
+
+  Widget build(BuildContext context) {
+    return BlocConsumer<TransactionCubit, TransactionStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        TransactionCubit cubit = TransactionCubit.get(context);
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              "Expense Records",
+              style: TextStyle(fontFamily: "Spacemono"),
+            ),
+          ),
+          body: Column(
+            children: [
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FilterChip(
+                        label: Text("List"),
+                        onSelected: (value) async {
+                          setState(() {
+                            cubit
+                                .getAllExpenseRecordFromDatabase(
+                                    cubit.mydatabase)
+                                .then((values) {
+                              cubit.recordsExpense = values;
+                            });
+                          });
+                        }),
+                    FilterChip(
+                        label: Text("Chart"),
+                        onSelected: (value) {
+                          setState(() {
+                            x = 2;
+                          });
+                        }),
+                    FilterChip(
+                        label: Text("Bar Chart"), onSelected: (value) {}),
+                  ],
+                ),
+              ),
+              Divider(),
+              Container(
+                height: 50,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FilterChip(
+                        label: Text("By date"),
+                        onSelected: (value) async {
+                          setState(() {
+                            cubit
+                                .getExpenseRecordByDate(cubit.mydatabase)
+                                .then((values) {
+                              cubit.recordsExpense = values;
+                            });
+                          });
+                        }),
+                    FilterChip(
+                        label: Text("By value"),
+                        onSelected: (value) async {
+                          setState(() {
+                            cubit
+                                .getExpenseRecordByValue(cubit.mydatabase)
+                                .then((values) {
+                              cubit.recordsExpense = values;
+                            });
+                          });
+                        }),
+                    FilterChip(
+                        label: Text("By Category"),
+                        onSelected: (value) async {
+                          setState(() {
+                            cubit
+                                .getExpenseRecordByCategory(cubit.mydatabase)
+                                .then((values) {
+                              cubit.recordsExpense = values;
+                            });
+                          });
+                        }),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: cubit.recordsExpense.length,
+                  itemBuilder: (context, index) {
+                    final record = cubit.recordsExpense[index];
+                    return RecordCard(
+                      id: record['id'],
+                      title: record['title'],
+                      date: record['date'],
+                      category: record['category'],
+                      value: record['value'],
+                      type: record['type'],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Expanded expenseDataVisualization(TransactionCubit cubit) {
+    switch (x) {
+      case 0:
+        return Expanded(
+          child: ListView.builder(
+            itemCount: cubit.recordsExpense.length,
+            itemBuilder: (context, index) {
+              final record = cubit.recordsExpense[index];
+              return RecordCard(
+                id: record['id'],
+                title: record['title'],
+                date: record['date'],
+                category: record['category'],
+                value: record['value'],
+                type: record['type'],
+              );
+            },
+          ),
+        );
+      case 1:
+        return Expanded(
+          child: ListView.builder(
+            itemCount: cubit.recordsExpense.length,
+            itemBuilder: (context, index) {
+              final record = cubit.recordsExpense[index];
+              return RecordCard(
+                id: record['id'],
+                title: record['title'],
+                date: record['date'],
+                category: record['category'],
+                value: record['value'],
+                type: record['type'],
+              );
+            },
+          ),
+        );
+
+      case 2:
+      default:
+        Expanded(
+          child: ListView.builder(
+            itemCount: cubit.recordsExpense.length,
+            itemBuilder: (context, index) {
+              final record = cubit.recordsExpense[index];
+              return RecordCard(
+                id: record['id'],
+                title: record['title'],
+                date: record['date'],
+                category: record['category'],
+                value: record['value'],
+                type: record['type'],
+              );
+            },
+          ),
+        );
+    }
+    return Expanded(
+      child: ListView.builder(
+        itemCount: cubit.recordsExpense.length,
+        itemBuilder: (context, index) {
+          final record = cubit.recordsExpense[index];
+          return RecordCard(
+            id: record['id'],
+            title: record['title'],
+            date: record['date'],
+            category: record['category'],
+            value: record['value'],
+            type: record['type'],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ChartData {
+  final String label;
+  final int value;
+  final Color color;
+
+  // Constructor with necessary fields
+  ChartData(this.label, this.value, this.color);
 }

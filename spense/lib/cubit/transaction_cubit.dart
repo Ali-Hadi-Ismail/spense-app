@@ -147,6 +147,26 @@ class TransactionCubit extends Cubit<TransactionStates> {
         .rawQuery('SELECT * FROM record WHERE type = "Income" ORDER BY id ');
   }
 
+  Future<List<Map>> getIncomeRecordByCategory(Database database) async {
+    return await database.rawQuery(
+        'SELECT * FROM record WHERE type ="Income" ORDER BY category');
+  }
+
+  Future<List<Map>> getExpenseRecordByCategory(Database database) async {
+    return await database.rawQuery(
+        'SELECT * FROM record WHERE type ="Expense" ORDER BY category');
+  }
+
+  Future<List<Map>> getExpenseRecordByValue(Database database) async {
+    return await database.rawQuery(
+        'SELECT * FROM record WHERE type = "Expense" ORDER BY value ');
+  }
+
+  Future<List<Map>> getExpenseRecordByDate(Database database) async {
+    return await database
+        .rawQuery('SELECT * FROM record WHERE type = "Expense" ORDER BY id ');
+  }
+
   Future<void> calculateIncomeAndExpense() async {
     income = 0;
     expense = 0;

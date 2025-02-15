@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     incomeButton(cubit, context),
-                    addTransactionButton(context),
+                    Container(width: 45, child: addTransactionButton(context)),
                     expenseButton(cubit),
                   ],
                 ),
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
   Drawer appDrawer() {
     return Drawer(
       elevation: 20,
-      shadowColor: Colors.green,
+      shadowColor: Colors.black,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(30),
@@ -185,12 +185,9 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            "Expense: ${cubit.expense} ",
+            "Expense: ${cubit.expense} \$ ",
             style: const TextStyle(
-                fontSize: 16,
-                fontFamily: "Spacemono",
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
+                fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           const Icon(FontAwesomeIcons.arrowTrendDown, color: Colors.white),
         ],
@@ -204,6 +201,9 @@ class HomeScreen extends StatelessWidget {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AddTransaction()));
       },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
       backgroundColor: Colors.grey.shade100,
       elevation: 7,
       child: const Icon(Icons.add),
@@ -229,15 +229,12 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Text(
-            "Income: ${cubit.income} ",
+            "Income: ${cubit.income} \$ ",
             style: const TextStyle(
-                fontSize: 16,
-                fontFamily: "Spacemono",
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
+                fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
           ),
           const Icon(FontAwesomeIcons.arrowTrendUp,
-              color: Colors.white, size: 20),
+              color: Colors.white, size: 18),
         ],
       ),
     );

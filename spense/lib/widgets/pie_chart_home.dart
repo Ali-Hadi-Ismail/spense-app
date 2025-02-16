@@ -45,7 +45,7 @@ class PieChartWithLabels extends StatelessWidget {
                       yValueMapper: (ChartData data, _) => data.value,
                       pointColorMapper: (ChartData data, _) => data.color,
                       innerRadius: '75%', // Adjusted for better space
-                      dataLabelSettings: DataLabelSettings(
+                      dataLabelSettings: const DataLabelSettings(
                         isVisible: true,
                         labelPosition: ChartDataLabelPosition.outside,
                         alignment: ChartAlignment.center,
@@ -56,7 +56,7 @@ class PieChartWithLabels extends StatelessWidget {
                       ),
                       dataLabelMapper: (ChartData data, _) {
                         if (income + expense == 0) {
-                          return '0%'; // Handle the case where income + expense is 0
+                          return '0%';
                         }
                         int percentage =
                             ((data.value / (income + expense)) * 100).toInt();

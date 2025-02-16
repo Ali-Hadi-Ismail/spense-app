@@ -38,6 +38,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.green.shade300,
             title: Text(
               "Income Records",
               style: TextStyle(fontFamily: "Spacemono"),
@@ -45,6 +46,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
           ),
           body: Column(
             children: [
+              SizedBox(height: 10),
               Container(
                 height: 50,
                 width: double.infinity,
@@ -75,7 +77,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   ],
                 ),
               ),
-              Divider(),
+              Divider(
+                indent: 40,
+                endIndent: 40,
+              ),
               Container(
                 height: 50,
                 width: double.infinity,

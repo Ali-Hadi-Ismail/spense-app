@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => transactionCubit,
-      child: MaterialApp(
+      child: const MaterialApp(
         title: 'Spense',
         debugShowCheckedModeBanner: false,
         home: HomeScreen(),

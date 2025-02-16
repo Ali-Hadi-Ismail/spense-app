@@ -6,6 +6,7 @@ import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:spense/cubit/states.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 import 'package:spense/models/transaction.dart';
+import 'package:spense/services/currency_exchange_rate.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({super.key});
@@ -20,7 +21,13 @@ class _AddTransactionState extends State<AddTransaction> {
   TextEditingController _categoriesController = TextEditingController();
   TextEditingController _titleController = TextEditingController();
   String? currency = 'USD'; // Default value for currency
-  List<String> currencyOptions = ['USD', 'LBP']; // Options for currency
+  late Future<List<String>> currencyOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    currencyOptions = getCurrencyCodes();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,20 +129,17 @@ class _AddTransactionState extends State<AddTransaction> {
 
   ElevatedButton acceptButton(TransactionCubit cubit, BuildContext context) {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         // using database directly
-        int value;
-        if (currency == "USD") {
-          value = int.parse(_valueController.text);
-        } else {
-          value = (int.parse(_valueController.text) / 89000).toInt();
-        }
+        double value = await getCurrencyRate(
+            currency!, double.parse(_valueController.text));
+
         DateTime now = DateTime.now();
         String formatedDate =
-            "${now.hour}:${now.second}  ${now.second}-${now.month}-${now.year}";
+            "${now.hour}:${now.minute}  ${now.day}-${now.month}-${now.year}";
         cubit.insertDatabase(
             category: _categoriesController.text,
-            value: value,
+            value: value.toInt(),
             title: _titleController.text,
             type: (isExpense) ? "Expense" : "Income",
             date: formatedDate);
@@ -143,7 +147,7 @@ class _AddTransactionState extends State<AddTransaction> {
         // using cubit
         Transaction transactionToBeAdded = Transaction(
             id: "a",
-            value: value,
+            value: value.toInt(),
             category: _categoriesController.text,
             title: _titleController.text,
             date: DateTime.now(),
@@ -227,24 +231,37 @@ class _AddTransactionState extends State<AddTransaction> {
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: DropdownButtonFormField<String>(
-            value: currency,
-            items: currencyOptions.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                currency = newValue;
-              });
+          child: FutureBuilder<List<String>>(
+            future: currencyOptions,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text("Error: ${snapshot.error}");
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text("No currencies available");
+              } else {
+                return DropdownButtonFormField<String>(
+                  value: currency,
+                  items: snapshot.data!.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      currency = newValue;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                );
+              }
             },
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
           ),
         ),
       ],

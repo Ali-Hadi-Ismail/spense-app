@@ -17,6 +17,13 @@ class RecordCard extends StatelessWidget {
     required this.date,
     required this.type,
   });
+  Color colorGR() {
+    if (type == "Expense") {
+      return Colors.red;
+    } else {
+      return Colors.green;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +44,13 @@ class RecordCard extends StatelessWidget {
               children: [
                 Text("Title                : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: (type == "Expense")
-                            ? Colors.red
-                            : Colors.green)), // Example type
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: colorGR(),
+                  ),
+                ), // Example type
               ],
             ),
             Row(
@@ -80,12 +88,13 @@ class RecordCard extends StatelessWidget {
               children: [
                 Text("Amount            : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("\$${value}",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: (type == "Expense")
-                            ? Colors.red
-                            : Colors.green)), // Example amount
+                Text(
+                  "\$${value}",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: colorGR(),
+                  ),
+                ), // Example amount
               ],
             ),
             const SizedBox(height: 3),
@@ -94,12 +103,13 @@ class RecordCard extends StatelessWidget {
               children: [
                 Text("Type                 : ",
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(type,
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: (type == "Expense")
-                            ? Colors.red
-                            : Colors.green)), // Example type
+                Text(
+                  type,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: colorGR(),
+                  ),
+                ),
               ],
             ),
           ],

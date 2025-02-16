@@ -41,9 +41,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               "Expense Records",
               style: TextStyle(fontFamily: "Spacemono"),
             ),
+            backgroundColor: Colors.red.shade300,
           ),
           body: Column(
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 height: 50,
                 width: double.infinity,

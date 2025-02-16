@@ -103,7 +103,7 @@ class _AddTransactionState extends State<AddTransaction> {
                       const SizedBox(height: 20),
                       valueInput(),
                       const SizedBox(height: 20),
-                      currencyInput(),
+                      currencyInput(isExpense ? Colors.red : Colors.green),
                       const SizedBox(
                         height: 30,
                       ),
@@ -218,7 +218,7 @@ class _AddTransactionState extends State<AddTransaction> {
     );
   }
 
-  Row currencyInput() {
+  Row currencyInput(Color c) {
     return Row(
       children: [
         const Text(
@@ -235,7 +235,9 @@ class _AddTransactionState extends State<AddTransaction> {
             future: currencyOptions,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return LinearProgressIndicator(
+                  color: c,
+                );
               } else if (snapshot.hasError) {
                 return Text("Error: ${snapshot.error}");
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

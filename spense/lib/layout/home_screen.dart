@@ -9,6 +9,9 @@ import 'package:spense/layout/expense_screen.dart';
 import 'package:spense/layout/income_screen.dart';
 import 'package:spense/widgets/pie_chart_home.dart';
 import 'package:spense/widgets/record_card.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,6 +32,8 @@ class HomeScreen extends StatelessWidget {
         });
 
         return Scaffold(
+          key: scaffoldKey, // Assign the scaffoldKey here
+          endDrawer: endDrawer(),
           appBar: appBar(),
           body: SafeArea(
             child: Column(
@@ -63,6 +68,61 @@ class HomeScreen extends StatelessWidget {
           drawer: appDrawer(),
         );
       },
+    );
+  }
+
+  Drawer endDrawer() {
+    return Drawer(
+      elevation: 60,
+      shadowColor: Colors.black,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(1000),
+          topLeft: Radius.circular(30),
+        ),
+      ),
+      child: Container(
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFFE6E6), // Very Light Red
+              Color(0xFFFFCCCC), // Softer Red
+            ],
+          ),
+        ),
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 100,
+              child: DrawerHeader(
+                child: Text(
+                  "Edit",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                    fontFamily: 'SpaceMono',
+                  ),
+                ),
+              ),
+            ),
+            drawerListLite("Edit Record ", Icons.edit),
+            const SizedBox(
+              height: 20,
+            ),
+            drawerListLite("Delete Record", Icons.delete),
+            const SizedBox(
+              height: 20,
+            ),
+            drawerListLite("Reset App", Icons.restore_rounded),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -246,6 +306,7 @@ class HomeScreen extends StatelessWidget {
 
   ListTile drawerListLite(String text, IconData listIcon) {
     return ListTile(
+      dense: true,
       trailing: Icon(listIcon, color: Colors.grey[800]),
       title: Text(
         text,
@@ -270,6 +331,17 @@ class HomeScreen extends StatelessWidget {
           fontFamily: 'SpaceMono',
         ),
       ),
+      actions: [
+        Container(
+            margin: const EdgeInsets.only(right: 5, top: 5),
+            child: IconButton(
+              alignment: Alignment.center,
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                scaffoldKey.currentState?.openEndDrawer();
+              },
+            ))
+      ],
     );
   }
 }

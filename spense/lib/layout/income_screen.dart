@@ -46,7 +46,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
           ),
           body: Column(
             children: [
-              SizedBox(height: 10),
+              SizedBox(
+                height: 10,
+              ),
               Container(
                 height: 50,
                 width: double.infinity,
@@ -77,10 +79,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   ],
                 ),
               ),
-              Divider(
-                indent: 40,
-                endIndent: 40,
-              ),
+              Divider(),
               Container(
                 height: 50,
                 width: double.infinity,

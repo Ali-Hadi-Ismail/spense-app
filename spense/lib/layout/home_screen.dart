@@ -1,12 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:spense/cubit/states.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 import 'package:spense/layout/add_transaction.dart';
 import 'package:spense/layout/expense_screen.dart';
 import 'package:spense/layout/income_screen.dart';
+import 'package:spense/models/transaction.dart';
 import 'package:spense/widgets/pie_chart_home.dart';
 import 'package:spense/widgets/record_card.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -27,51 +29,94 @@ class HomeScreen extends StatelessWidget {
           cubit.records = value;
           cubit.emit(TransactionUpdated(cubit.income, cubit.expense,
               cubit.totalPrice, cubit.transaction));
-          if (cubit.records.isEmpty) cubit.insertInitialRecords();
+
           cubit.calculateIncomeAndExpense();
         });
+        Widget body(int income, int expense) {
+          if (cubit.income == 0 && cubit.expense == 0) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/noRecord.svg",
+                    height: 200,
+                    width: 200,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "No Records Found",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'SpaceMono',
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return Body(cubit, context);
+        }
 
         return Scaffold(
           key: scaffoldKey, // Assign the scaffoldKey here
-          endDrawer: endDrawer(),
+          endDrawer: endDrawer(context),
           appBar: appBar(),
-          body: SafeArea(
-            child: Column(
-              children: [
-                const Divider(
-                  thickness: 0.2,
-                  color: Colors.black,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-                const Text(
-                  "Net Balance",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: "SpaceMono",
-                      fontWeight: FontWeight.bold),
-                ),
-                const SafeArea(child: PieChartWithLabels()),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    incomeButton(cubit, context),
-                    addTransactionButton(context),
-                    expenseButton(cubit, context),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                recordHistoryCard(cubit),
-              ],
-            ),
-          ),
+          body: body(cubit.income, cubit.expense),
           drawer: appDrawer(),
+          floatingActionButton: (cubit.income == 0 && cubit.expense == 0)
+              ? FloatingActionButton(
+                  heroTag: "addTransaction",
+                  backgroundColor: Colors.grey.shade100,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddTransaction()));
+                  },
+                  child: Icon(Icons.add),
+                )
+              : null,
         );
       },
     );
   }
 
-  Drawer endDrawer() {
+  SafeArea Body(TransactionCubit cubit, BuildContext context) {
+    return SafeArea(
+      child: Column(
+        children: [
+          const Divider(
+            thickness: 0.2,
+            color: Colors.black,
+            indent: 0,
+            endIndent: 0,
+          ),
+          const Text(
+            "Net Balance",
+            style: TextStyle(
+                fontSize: 24,
+                fontFamily: "SpaceMono",
+                fontWeight: FontWeight.bold),
+          ),
+          const SafeArea(child: PieChartWithLabels()),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              incomeButton(cubit, context),
+              addTransactionButton(context),
+              expenseButton(cubit, context),
+            ],
+          ),
+          const SizedBox(height: 10),
+          recordHistoryCard(cubit),
+        ],
+      ),
+    );
+  }
+
+  Drawer endDrawer(BuildContext context) {
     return Drawer(
       elevation: 60,
       shadowColor: Colors.black,
@@ -108,15 +153,25 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            drawerListLite("Edit Record ", Icons.edit),
+            drawerListLite("Edit Record ", Icons.edit, () {}),
             const SizedBox(
               height: 20,
             ),
-            drawerListLite("Delete Record", Icons.delete),
+            drawerListLite(
+              "Delete Record",
+              Icons.delete,
+              () {},
+            ),
             const SizedBox(
               height: 20,
             ),
-            drawerListLite("Reset App", Icons.restore_rounded),
+            drawerListLite(
+              "Reset App",
+              Icons.restore_rounded,
+              () {
+                TransactionCubit.get(context).deleteDatabase();
+              },
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -165,24 +220,25 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
+            drawerListLite("Risk Management ",
+                Icons.align_vertical_bottom_outlined, () {}),
+            const SizedBox(
+              height: 20,
+            ),
             drawerListLite(
-                "Risk Management ", Icons.align_vertical_bottom_outlined),
+                "Economic Reports", Icons.account_balance_outlined, () {}),
             const SizedBox(
               height: 20,
             ),
-            drawerListLite("Economic Reports", Icons.account_balance_outlined),
+            drawerListLite("Financial Statements", Icons.savings, () {}),
             const SizedBox(
               height: 20,
             ),
-            drawerListLite("Financial Statements", Icons.savings),
+            drawerListLite("Setting", Icons.settings, () {}),
             const SizedBox(
               height: 20,
             ),
-            drawerListLite("Setting", Icons.settings),
-            const SizedBox(
-              height: 20,
-            ),
-            drawerListLite("About Us", FontAwesomeIcons.userGroup),
+            drawerListLite("About Us", FontAwesomeIcons.userGroup, () {}),
             const SizedBox(
               height: 20,
             ),
@@ -304,8 +360,10 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  ListTile drawerListLite(String text, IconData listIcon) {
+  ListTile drawerListLite(String text, IconData listIcon, VoidCallback f,
+      {cubit}) {
     return ListTile(
+      onTap: f,
       dense: true,
       trailing: Icon(listIcon, color: Colors.grey[800]),
       title: Text(

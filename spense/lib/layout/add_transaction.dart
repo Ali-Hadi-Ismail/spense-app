@@ -96,14 +96,14 @@ class _AddTransactionState extends State<AddTransaction> {
                       fillTransactionText(),
                       const SizedBox(height: 20),
                       typeOfTransactionToggel(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       titleInput(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       categoryInput(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 40),
                       valueInput(),
-                      const SizedBox(height: 20),
-                      currencyInput(isExpense ? Colors.red : Colors.green),
+                      const SizedBox(height: 10),
+                      //    currencyInput(isExpense ? Colors.red : Colors.green),
                       const SizedBox(
                         height: 30,
                       ),
@@ -131,8 +131,7 @@ class _AddTransactionState extends State<AddTransaction> {
     return ElevatedButton(
       onPressed: () async {
         // using database directly
-        double value = await getCurrencyRate(
-            currency!, double.parse(_valueController.text));
+        double value = double.parse(_valueController.text);
 
         DateTime now = DateTime.now();
         String formatedDate =
@@ -232,20 +231,24 @@ class _AddTransactionState extends State<AddTransaction> {
         const SizedBox(width: 10),
         Expanded(
           child: FutureBuilder<List<String>>(
-            future: currencyOptions,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return LinearProgressIndicator(
-                  color: c,
-                );
-              } else if (snapshot.hasError) {
-                return Text("Error: ${snapshot.error}");
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Text("No currencies available");
-              } else {
+              future: currencyOptions,
+              builder: (context, snapshot) {
+                List<String> currencyOptions = [
+                  "USD",
+                  "EUR",
+                  "GBP",
+                  "JPY",
+                  "AUD",
+                  "CAD",
+                  "CHF",
+                  "CNY",
+                  "SEK",
+                  "NZD"
+                ];
+
                 return DropdownButtonFormField<String>(
                   value: currency,
-                  items: snapshot.data!.map((String value) {
+                  items: currencyOptions.map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -262,9 +265,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     ),
                   ),
                 );
-              }
-            },
-          ),
+              }),
         ),
       ],
     );

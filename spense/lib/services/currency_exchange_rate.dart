@@ -8,13 +8,17 @@ Future<Map<String, double>> getExchangeRates() async {
   final response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
     Map<String, dynamic> data = json.decode(response.body);
-    Map<String, double> rates = {};
-    data['rates'].forEach((key, value) {
-      rates[key] = (value is int) ? value.toDouble() : value;
-    });
-    return rates;
+    if (data.containsKey('rates')) {
+      Map<String, double> rates = {};
+      data['rates'].forEach((key, value) {
+        rates[key] = (value is int) ? value.toDouble() : value;
+      });
+      return rates;
+    } else {
+      throw Exception("Failed to load exchange rates: 'rates' key not found");
+    }
   } else {
-    throw Exception("Failed to load exchange rates");
+    throw Exception("Failed to load exchange rates: ${response.statusCode}");
   }
 }
 

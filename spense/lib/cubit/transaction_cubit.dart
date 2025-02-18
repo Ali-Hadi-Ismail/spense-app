@@ -183,8 +183,15 @@ class TransactionCubit extends Cubit<TransactionStates> {
     emit(TransactionUpdated(income, expense, totalPrice, transaction));
   }
 
-  void deleteDatabase() async {
+  void deleteAllDatabaseRecord() async {
     await mydatabase.execute('DELETE FROM record');
+    records = await getAllRecordFromDatabase(mydatabase);
+    calculateIncomeAndExpense();
+    emit(TransactionUpdated(income, expense, totalPrice, transaction));
+  }
+
+  void deleteRecord(int id) async {
+    await mydatabase.execute('DELETE FROM record WHERE id = $id');
     records = await getAllRecordFromDatabase(mydatabase);
     calculateIncomeAndExpense();
     emit(TransactionUpdated(income, expense, totalPrice, transaction));

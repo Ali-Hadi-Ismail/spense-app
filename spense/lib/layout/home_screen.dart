@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
               ),
             );
           }
-          return Body(cubit, context);
+          return SingleChildScrollView(child: Body(cubit, context));
         }
 
         return Scaffold(
@@ -160,7 +160,88 @@ class HomeScreen extends StatelessWidget {
             drawerListLite(
               "Delete Record",
               Icons.delete,
-              () {},
+              () {
+                TextEditingController _id = TextEditingController();
+                Navigator.pop(context);
+                showDialog(
+                    barrierColor: Colors.black45.withOpacity(0.7),
+                    traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
+                    useSafeArea: true,
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          shadowColor: Colors.black,
+                          elevation: 20,
+                          scrollable: true,
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text(
+                                  "   id  :  ",
+                                  style: TextStyle(
+                                    fontFamily: "Spacemono",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: TextFormField(
+                                    style: const TextStyle(
+                                        fontSize: 12, fontFamily: "Spacemono"),
+                                    controller: _id,
+                                    decoration: InputDecoration(
+                                      hintText:
+                                          "Enter Record Id , to delete record",
+                                      hintStyle: const TextStyle(
+                                        fontFamily: "monospace",
+                                        fontSize: 10,
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "Cancel",
+                                  ),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      TransactionCubit.get(context)
+                                          .deleteRecord(int.parse(_id.text));
+                                    },
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            WidgetStatePropertyAll(Colors.red)),
+                                    child: Text(
+                                      "Delete",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                              ],
+                            ),
+                          ],
+                          title: const Text("Delete Record "),
+                          titleTextStyle: const TextStyle(
+                              fontFamily: "Spacemono",
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ));
+              },
             ),
             const SizedBox(
               height: 20,
@@ -169,7 +250,7 @@ class HomeScreen extends StatelessWidget {
               "Reset App",
               Icons.restore_rounded,
               () {
-                TransactionCubit.get(context).deleteDatabase();
+                TransactionCubit.get(context).deleteAllDatabaseRecord();
               },
             ),
             const SizedBox(

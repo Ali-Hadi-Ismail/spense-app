@@ -250,6 +250,7 @@ class HomeScreen extends StatelessWidget {
               "Reset App",
               Icons.restore_rounded,
               () {
+                Navigator.pop(context);
                 TransactionCubit.get(context).deleteAllDatabaseRecord();
               },
             ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:spense/cubit/transaction_cubit.dart';
-import 'package:spense/cubit/states.dart';
+import 'package:spense/shared/cubit/transaction_cubit.dart';
+import 'package:spense/shared/cubit/states.dart';
 
 class PieChartWithLabels extends StatelessWidget {
   const PieChartWithLabels({super.key});

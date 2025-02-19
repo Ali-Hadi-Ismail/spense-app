@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spense/cubit/states.dart';
-import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/shared/cubit/states.dart';
+import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/models/transaction.dart';
-import 'package:spense/widgets/pie_chart_home.dart';
-import 'package:spense/widgets/record_card.dart';
+import 'package:spense/shared/widgets/pie_chart_home.dart';
+import 'package:spense/shared/widgets/record_card.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class ExpenseScreen extends StatefulWidget {
-  const ExpenseScreen({super.key});
+class IncomeScreen extends StatefulWidget {
+  const IncomeScreen({super.key});
 
   @override
-  State<ExpenseScreen> createState() => _ExpenseScreenState();
+  State<IncomeScreen> createState() => _IncomeScreenState();
 }
 
 int? x;
 
-class _ExpenseScreenState extends State<ExpenseScreen> {
+class _IncomeScreenState extends State<IncomeScreen> {
   @override
   initState() {
     TransactionCubit cubit = TransactionCubit.get(context);
@@ -29,6 +29,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionCubit, TransactionStates>(
       listener: (context, state) {},
@@ -37,11 +38,11 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.green.shade300,
             title: Text(
-              "Expense Records",
+              "Income Records",
               style: TextStyle(fontFamily: "Spacemono"),
             ),
-            backgroundColor: Colors.red.shade300,
           ),
           body: Column(
             children: [
@@ -59,10 +60,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         onSelected: (value) async {
                           setState(() {
                             cubit
-                                .getAllExpenseRecordFromDatabase(
+                                .getAllIncomeRecordFromDatabase(
                                     cubit.mydatabase)
                                 .then((values) {
-                              cubit.recordsExpense = values;
+                              cubit.recordsIncome = values;
                             });
                           });
                         }),
@@ -88,34 +89,28 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     FilterChip(
                         label: Text("By date"),
                         onSelected: (value) async {
-                          setState(() {
-                            cubit
-                                .getExpenseRecordByDate(cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
-                            });
+                          cubit
+                              .getIncomeRecordByDate(cubit.mydatabase)
+                              .then((values) {
+                            cubit.recordsIncome = values;
                           });
                         }),
                     FilterChip(
                         label: Text("By value"),
                         onSelected: (value) async {
-                          setState(() {
-                            cubit
-                                .getExpenseRecordByValue(cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
-                            });
+                          cubit
+                              .getIncomeRecordByValue(cubit.mydatabase)
+                              .then((values) {
+                            cubit.recordsIncome = values;
                           });
                         }),
                     FilterChip(
                         label: Text("By Category"),
                         onSelected: (value) async {
-                          setState(() {
-                            cubit
-                                .getExpenseRecordByCategory(cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
-                            });
+                          cubit
+                              .getIncomeRecordByCategory(cubit.mydatabase)
+                              .then((values) {
+                            cubit.recordsIncome = values;
                           });
                         }),
                   ],
@@ -123,9 +118,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: cubit.recordsExpense.length,
+                  itemCount: cubit.recordsIncome.length,
                   itemBuilder: (context, index) {
-                    final record = cubit.recordsExpense[index];
+                    final record = cubit.recordsIncome[index];
                     return RecordCard(
                       id: record['id'],
                       title: record['title'],
@@ -144,14 +139,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
   }
 
-  Expanded expenseDataVisualization(TransactionCubit cubit) {
+  Expanded incomeDataVisualization(TransactionCubit cubit) {
     switch (x) {
       case 0:
         return Expanded(
           child: ListView.builder(
-            itemCount: cubit.recordsExpense.length,
+            itemCount: cubit.recordsIncome.length,
             itemBuilder: (context, index) {
-              final record = cubit.recordsExpense[index];
+              final record = cubit.recordsIncome[index];
               return RecordCard(
                 id: record['id'],
                 title: record['title'],
@@ -166,9 +161,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       case 1:
         return Expanded(
           child: ListView.builder(
-            itemCount: cubit.recordsExpense.length,
+            itemCount: cubit.recordsIncome.length,
             itemBuilder: (context, index) {
-              final record = cubit.recordsExpense[index];
+              final record = cubit.recordsIncome[index];
               return RecordCard(
                 id: record['id'],
                 title: record['title'],
@@ -185,9 +180,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       default:
         Expanded(
           child: ListView.builder(
-            itemCount: cubit.recordsExpense.length,
+            itemCount: cubit.recordsIncome.length,
             itemBuilder: (context, index) {
-              final record = cubit.recordsExpense[index];
+              final record = cubit.recordsIncome[index];
               return RecordCard(
                 id: record['id'],
                 title: record['title'],
@@ -202,9 +197,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     }
     return Expanded(
       child: ListView.builder(
-        itemCount: cubit.recordsExpense.length,
+        itemCount: cubit.recordsIncome.length,
         itemBuilder: (context, index) {
-          final record = cubit.recordsExpense[index];
+          final record = cubit.recordsIncome[index];
           return RecordCard(
             id: record['id'],
             title: record['title'],

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
-import 'package:spense/cubit/states.dart';
-import 'package:spense/cubit/transaction_cubit.dart';
-import 'package:spense/layout/add_transaction.dart';
-import 'package:spense/layout/expense_screen.dart';
-import 'package:spense/layout/income_screen.dart';
+import 'package:spense/shared/cubit/states.dart';
+import 'package:spense/shared/cubit/transaction_cubit.dart';
+import 'package:spense/modules/add_transaction.dart';
+import 'package:spense/modules/expense_screen.dart';
+import 'package:spense/modules/income_screen.dart';
 import 'package:spense/models/transaction.dart';
-import 'package:spense/widgets/pie_chart_home.dart';
-import 'package:spense/widgets/record_card.dart';
+import 'package:spense/shared/widgets/pie_chart_home.dart';
+import 'package:spense/shared/widgets/record_card.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -476,7 +476,7 @@ class HomeScreen extends StatelessWidget {
             margin: const EdgeInsets.only(right: 5, top: 5),
             child: IconButton(
               alignment: Alignment.center,
-              icon: Icon(Icons.edit),
+              icon: const Icon(Icons.edit),
               onPressed: () {
                 scaffoldKey.currentState?.openEndDrawer();
               },

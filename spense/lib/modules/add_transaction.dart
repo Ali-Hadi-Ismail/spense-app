@@ -1,12 +1,11 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
-import 'package:spense/cubit/states.dart';
-import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/shared/cubit/states.dart';
+import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/models/transaction.dart';
-import 'package:spense/services/currency_exchange_rate.dart';
+import 'package:spense/shared/services/currency_exchange_rate.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({super.key});
@@ -16,11 +15,11 @@ class AddTransaction extends StatefulWidget {
 }
 
 class _AddTransactionState extends State<AddTransaction> {
-  bool isExpense = false; // Default: Income
-  TextEditingController _valueController = TextEditingController();
-  TextEditingController _categoriesController = TextEditingController();
-  TextEditingController _titleController = TextEditingController();
-  String? currency = 'USD'; // Default value for currency
+  bool isExpense = false;
+  final TextEditingController _valueController = TextEditingController();
+  final TextEditingController _categoriesController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  String? currency = 'USD';
   late Future<List<String>> currencyOptions;
 
   @override
@@ -87,7 +86,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     ),
                   ],
                 ),
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -103,17 +102,16 @@ class _AddTransactionState extends State<AddTransaction> {
                       const SizedBox(height: 40),
                       valueInput(),
                       const SizedBox(height: 10),
-                      //    currencyInput(isExpense ? Colors.red : Colors.green),
                       const SizedBox(
                         height: 30,
                       ),
-                      Divider(color: Colors.black38, thickness: 1),
+                      const Divider(color: Colors.black38, thickness: 1),
                       const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           cancelButton(context),
-                          acceptButton(cubit, context),
+                          acceptButton(context),
                         ],
                       )
                     ],
@@ -127,16 +125,15 @@ class _AddTransactionState extends State<AddTransaction> {
     );
   }
 
-  ElevatedButton acceptButton(TransactionCubit cubit, BuildContext context) {
+  ElevatedButton acceptButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        // using database directly
         double value = double.parse(_valueController.text);
 
         DateTime now = DateTime.now();
         String formatedDate =
             "${now.hour}:${now.minute}  ${now.day}-${now.month}-${now.year}";
-        cubit.insertDatabase(
+        TransactionCubit.get(context).insertDatabase(
             category: _categoriesController.text,
             value: value.toInt(),
             title: _titleController.text,
@@ -152,8 +149,7 @@ class _AddTransactionState extends State<AddTransaction> {
             date: DateTime.now(),
             type: (isExpense) ? "Expense" : "Income");
 
-        cubit.addTransaction(
-            transactionToBeAdded); // Use the addTransaction method
+        TransactionCubit.get(context).addTransaction(transactionToBeAdded);
 
         Navigator.pop(context);
       },

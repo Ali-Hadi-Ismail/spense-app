@@ -3,20 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spense/cubit/states.dart';
 import 'package:spense/cubit/transaction_cubit.dart';
 import 'package:spense/models/transaction.dart';
-import 'package:spense/widgets/pie_chart_home.dart';
-import 'package:spense/widgets/record_card.dart';
+import 'package:spense/shared/widgets/record_card.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class IncomeScreen extends StatefulWidget {
-  const IncomeScreen({super.key});
+class ExpenseScreen extends StatefulWidget {
+  const ExpenseScreen({super.key});
 
   @override
-  State<IncomeScreen> createState() => _IncomeScreenState();
+  State<ExpenseScreen> createState() => _ExpenseScreenState();
 }
 
 int? x;
 
-class _IncomeScreenState extends State<IncomeScreen> {
+class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   initState() {
     TransactionCubit cubit = TransactionCubit.get(context);
@@ -29,7 +29,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
     });
   }
 
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionCubit, TransactionStates>(
       listener: (context, state) {},
@@ -38,11 +37,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.green.shade300,
             title: Text(
-              "Income Records",
+              "Expense Records",
               style: TextStyle(fontFamily: "Spacemono"),
             ),
+            backgroundColor: Colors.red.shade300,
           ),
           body: Column(
             children: [
@@ -60,10 +59,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         onSelected: (value) async {
                           setState(() {
                             cubit
-                                .getAllIncomeRecordFromDatabase(
+                                .getAllExpenseRecordFromDatabase(
                                     cubit.mydatabase)
                                 .then((values) {
-                              cubit.recordsIncome = values;
+                              cubit.recordsExpense = values;
                             });
                           });
                         }),
@@ -91,9 +90,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         onSelected: (value) async {
                           setState(() {
                             cubit
-                                .getIncomeRecordByDate(cubit.mydatabase)
+                                .getExpenseRecordByDate(cubit.mydatabase)
                                 .then((values) {
-                              cubit.recordsIncome = values;
+                              cubit.recordsExpense = values;
                             });
                           });
                         }),
@@ -102,9 +101,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         onSelected: (value) async {
                           setState(() {
                             cubit
-                                .getIncomeRecordByValue(cubit.mydatabase)
+                                .getExpenseRecordByValue(cubit.mydatabase)
                                 .then((values) {
-                              cubit.recordsIncome = values;
+                              cubit.recordsExpense = values;
                             });
                           });
                         }),
@@ -113,9 +112,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         onSelected: (value) async {
                           setState(() {
                             cubit
-                                .getIncomeRecordByCategory(cubit.mydatabase)
+                                .getExpenseRecordByCategory(cubit.mydatabase)
                                 .then((values) {
-                              cubit.recordsIncome = values;
+                              cubit.recordsExpense = values;
                             });
                           });
                         }),
@@ -124,9 +123,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: cubit.recordsIncome.length,
+                  itemCount: cubit.recordsExpense.length,
                   itemBuilder: (context, index) {
-                    final record = cubit.recordsIncome[index];
+                    final record = cubit.recordsExpense[index];
                     return RecordCard(
                       id: record['id'],
                       title: record['title'],
@@ -145,14 +144,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  Expanded incomeDataVisualization(TransactionCubit cubit) {
+  Expanded expenseDataVisualization(TransactionCubit cubit) {
     switch (x) {
       case 0:
         return Expanded(
           child: ListView.builder(
-            itemCount: cubit.recordsIncome.length,
+            itemCount: cubit.recordsExpense.length,
             itemBuilder: (context, index) {
-              final record = cubit.recordsIncome[index];
+              final record = cubit.recordsExpense[index];
               return RecordCard(
                 id: record['id'],
                 title: record['title'],
@@ -167,9 +166,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
       case 1:
         return Expanded(
           child: ListView.builder(
-            itemCount: cubit.recordsIncome.length,
+            itemCount: cubit.recordsExpense.length,
             itemBuilder: (context, index) {
-              final record = cubit.recordsIncome[index];
+              final record = cubit.recordsExpense[index];
               return RecordCard(
                 id: record['id'],
                 title: record['title'],
@@ -186,9 +185,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
       default:
         Expanded(
           child: ListView.builder(
-            itemCount: cubit.recordsIncome.length,
+            itemCount: cubit.recordsExpense.length,
             itemBuilder: (context, index) {
-              final record = cubit.recordsIncome[index];
+              final record = cubit.recordsExpense[index];
               return RecordCard(
                 id: record['id'],
                 title: record['title'],
@@ -203,9 +202,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
     }
     return Expanded(
       child: ListView.builder(
-        itemCount: cubit.recordsIncome.length,
+        itemCount: cubit.recordsExpense.length,
         itemBuilder: (context, index) {
-          final record = cubit.recordsIncome[index];
+          final record = cubit.recordsExpense[index];
           return RecordCard(
             id: record['id'],
             title: record['title'],

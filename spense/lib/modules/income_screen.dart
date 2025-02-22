@@ -20,9 +20,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
   @override
   initState() {
     TransactionCubit cubit = TransactionCubit.get(context);
-    x = 0;
     super.initState();
-    cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((value) {
+    x = 0;
+    cubit.getAllIncomeRecordFromDatabase(cubit.mydatabase).then((value) {
       cubit.recordsExpense = value;
       cubit.emit(TransactionUpdated(
           cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));

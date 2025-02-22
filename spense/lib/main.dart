@@ -28,14 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-/*  
-
-  Notes :
-  Difficulties: 
-    1 - cubit blocProvider vs blocConsumer vs blocBuilder 
-    2 - fl_chart  syncfusion chart 
-    3 - upgrading flutter SDK and graddel 
-    4 - sqflite in cubit aliasing 
-    5 - chart label 
-*/

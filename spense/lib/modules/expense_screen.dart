@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spense/cubit/states.dart';
-import 'package:spense/cubit/transaction_cubit.dart';
+import 'package:spense/shared/cubit/states.dart';
+import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/models/transaction.dart';
 import 'package:spense/shared/widgets/record_card.dart';
-
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ExpenseScreen extends StatefulWidget {
@@ -14,21 +13,24 @@ class ExpenseScreen extends StatefulWidget {
   State<ExpenseScreen> createState() => _ExpenseScreenState();
 }
 
-int? x;
-
 class _ExpenseScreenState extends State<ExpenseScreen> {
+  int? x;
+
   @override
-  initState() {
-    TransactionCubit cubit = TransactionCubit.get(context);
-    x = 0;
+  void initState() {
     super.initState();
-    cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((value) {
-      cubit.recordsExpense = value;
-      cubit.emit(TransactionUpdated(
-          cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      TransactionCubit cubit = TransactionCubit.get(context);
+      x = 0;
+      cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((value) {
+        cubit.recordsExpense = value;
+        cubit.emit(TransactionUpdated(
+            cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));
+      });
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionCubit, TransactionStates>(
       listener: (context, state) {},

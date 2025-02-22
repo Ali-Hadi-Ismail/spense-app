@@ -196,5 +196,12 @@ class TransactionCubit extends Cubit<TransactionStates> {
     emit(TransactionUpdated(income, expense, totalPrice, transaction));
   }
 
-  void updateDatabase() {}
+  void updateRecord(int id, Map<String, dynamic> updatedData) async {
+    await mydatabase.update(
+      "record",
+      updatedData,
+      where: "id = ? ",
+      whereArgs: [id],
+    );
+  }
 }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
-import 'package:spense/cubit/transaction_cubit.dart';
 import 'package:spense/layout/home_screen.dart';
 import 'package:spense/modules/add_transaction.dart';
 import 'package:spense/modules/expense_screen.dart';
 import 'package:spense/modules/income_screen.dart';
+import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/shared/widgets/pie_chart_home.dart';
 
 import 'record_card.dart';
 
-SafeArea Body(var cubit, BuildContext context) {
+SafeArea Body(TransactionCubit cubit, BuildContext context) {
   return SafeArea(
     child: Column(
       children: [

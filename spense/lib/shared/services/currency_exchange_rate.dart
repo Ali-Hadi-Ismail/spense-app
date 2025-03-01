@@ -10,8 +10,8 @@ Future<Map<String, double>> getExchangeRates() async {
     Map<String, dynamic> data = json.decode(response.body);
     if (data.containsKey('rates')) {
       Map<String, double> rates = {};
-      data['rates'].forEach((key, value) {
-        rates[key] = (value is int) ? value.toDouble() : value;
+      data['rates'].forEach((key, amount) {
+        rates[key] = (amount is int) ? amount.toDouble() : amount;
       });
       return rates;
     } else {

@@ -1,6 +1,6 @@
 class Transaction {
   String? id;
-  int value;
+  int amount;
   String category;
   String title;
   DateTime date;
@@ -8,7 +8,7 @@ class Transaction {
 
   Transaction({
     this.id,
-    required this.value,
+    required this.amount,
     required this.category,
     required this.title,
     required this.date,
@@ -18,7 +18,7 @@ class Transaction {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'value': value,
+      'amount': amount,
       'category': category,
       'title': title,
       'date': date.toIso8601String(),

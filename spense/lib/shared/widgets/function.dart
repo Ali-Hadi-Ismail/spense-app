@@ -282,7 +282,7 @@ Card recordHistoryCard(TransactionCubit cubit) {
                   title: record['title'],
                   date: record['date'],
                   category: record['category'],
-                  value: record['value'],
+                  amount: record['amount'],
                   type: record['type'],
                 );
               }).toList(),

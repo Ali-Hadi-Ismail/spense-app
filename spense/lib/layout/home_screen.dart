@@ -18,8 +18,8 @@ class HomeScreen extends StatelessWidget {
       builder: (context, state) {
         TransactionCubit cubit = TransactionCubit.get(context);
         // Fetch all records when the screen is initialized
-        cubit.getAllRecordFromDatabase(cubit.mydatabase).then((value) {
-          cubit.records = value;
+        cubit.getAllRecordFromDatabase(cubit.mydatabase).then((amount) {
+          cubit.records = amount;
           cubit.emit(TransactionUpdated(cubit.income, cubit.expense,
               cubit.totalPrice, cubit.transaction));
 

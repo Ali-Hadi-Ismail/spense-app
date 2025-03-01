@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RecordCard extends StatelessWidget {
-  int id;
-  int value;
-  String category;
-  String title;
-  String date;
-  String type;
+  final int id;
+  final int amount;
+  final String category;
+  final String title;
+  final String date;
+  final String type;
 
   RecordCard({
     required this.id,
-    required this.value,
+    required this.amount,
     required this.category,
     required this.title,
     required this.date,
     required this.type,
   });
+
   Color colorGR() {
     if (type == "Expense") {
       return Colors.red;
@@ -95,7 +96,7 @@ class RecordCard extends StatelessWidget {
                     Text("Amount            : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(
-                      "\$${value}",
+                      "\$${amount}",
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: colorGR(),

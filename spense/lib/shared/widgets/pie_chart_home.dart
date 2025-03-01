@@ -42,7 +42,7 @@ class PieChartWithLabels extends StatelessWidget {
 
                       enableTooltip: true,
                       xValueMapper: (ChartData data, _) => data.label,
-                      yValueMapper: (ChartData data, _) => data.value,
+                      yValueMapper: (ChartData data, _) => data.amount,
                       pointColorMapper: (ChartData data, _) => data.color,
                       innerRadius: '75%', // Adjusted for better space
                       dataLabelSettings: const DataLabelSettings(
@@ -59,7 +59,7 @@ class PieChartWithLabels extends StatelessWidget {
                           return '0%';
                         }
                         int percentage =
-                            ((data.value / (income + expense)) * 100).toInt();
+                            ((data.amount / (income + expense)) * 100).toInt();
                         return '${percentage}%';
                       },
                     ),
@@ -87,9 +87,9 @@ class PieChartWithLabels extends StatelessWidget {
 
 class ChartData {
   final String label;
-  final int value;
+  final int amount;
   final Color color;
 
   // Constructor with necessary fields
-  ChartData(this.label, this.value, this.color);
+  ChartData(this.label, this.amount, this.color);
 }

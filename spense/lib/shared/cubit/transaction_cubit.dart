@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/models/transaction.dart' as spense;
@@ -13,14 +15,14 @@ class TransactionCubit extends Cubit<TransactionStates> {
   int expense = 0;
   List<spense.Transaction> transaction = [
     spense.Transaction(
-        value: 10,
+        amount: 10,
         category: "Personal Care",
         title: "Hair Cut",
         id: "0",
         date: DateTime.now(),
         type: "Expense"),
     spense.Transaction(
-        value: 50,
+        amount: 50,
         id: "1",
         category: "Freelance",
         title: "Spense Project",
@@ -33,12 +35,21 @@ class TransactionCubit extends Cubit<TransactionStates> {
   void addTransaction(spense.Transaction transactionToBeAdded) {
     transaction.add(transactionToBeAdded);
     if (transactionToBeAdded.type == "Expense") {
-      expense += transactionToBeAdded.value;
+      expense += transactionToBeAdded.amount;
     } else {
-      income += transactionToBeAdded.value;
+      income += transactionToBeAdded.amount;
     }
     emit(TransactionUpdated(
         income, expense, totalPrice, transaction)); // Emit a new state!
+  }
+
+  bool isExpense = false;
+  Color colorGR() {
+    if (isExpense) {
+      return Colors.red;
+    } else {
+      return Colors.green;
+    }
   }
 
   int getIncome() => income;
@@ -55,17 +66,17 @@ class TransactionCubit extends Cubit<TransactionStates> {
   Future<void> createDatabase() async {
     mydatabase = await openDatabase(
       'spense.db',
-      version: 2,
+      version: 3,
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE record (id INTEGER PRIMARY KEY, category TEXT, value INTEGER, title TEXT, date TEXT, type TEXT)');
+            'CREATE TABLE record (id INTEGER PRIMARY KEY, category TEXT, amount INTEGER, title TEXT, date TEXT, type TEXT)');
         print("Table is created");
       },
       onOpen: (database) async {
         print("Database Opened");
 
-        getAllRecordFromDatabase(database).then((value) {
-          records = value;
+        getAllRecordFromDatabase(database).then((amount) {
+          records = amount;
           calculateIncomeAndExpense();
           emit(TransactionUpdated(income, expense, totalPrice, transaction));
         });
@@ -79,28 +90,28 @@ class TransactionCubit extends Cubit<TransactionStates> {
 
     await insertDatabase(
         category: "Salary",
-        value: 500,
+        amount: 500,
         title: "Full-time Job",
         date: "09:30 15-02-2025",
         type: "Income");
 
     await insertDatabase(
         category: "Freelance",
-        value: 200,
+        amount: 200,
         title: "Side Project",
         date: "10:00 15-02-2025",
         type: "Income");
 
     await insertDatabase(
         category: "Food",
-        value: 50,
+        amount: 50,
         title: "Groceries",
         date: "11:30 15-02-2025",
         type: "Expense");
 
     await insertDatabase(
         category: "Transport",
-        value: 30,
+        amount: 30,
         title: "Bus Ticket",
         date: "12:00 15-02-2025",
         type: "Expense");
@@ -108,7 +119,7 @@ class TransactionCubit extends Cubit<TransactionStates> {
 
   Future<void> insertDatabase({
     required String category,
-    required int value,
+    required int amount,
     required String title,
     required String date,
     required String type,
@@ -116,8 +127,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
     await _dbReadyCompleter.future; // Wait until the database is ready
     await mydatabase.transaction((txn) async {
       await txn.rawInsert(
-          'INSERT INTO record(category, value, title, date, type) VALUES (?, ?, ?, ?, ?)',
-          [category, value, title, date, type]);
+          'INSERT INTO record(category, amount, title, date, type) VALUES (?, ?, ?, ?, ?)',
+          [category, amount, title, date, type]);
       print("Record inserted successfully");
     });
   }
@@ -136,9 +147,9 @@ class TransactionCubit extends Cubit<TransactionStates> {
         .rawQuery('SELECT * FROM record WHERE type = "Expense"');
   }
 
-  Future<List<Map>> getIncomeRecordByValue(Database database) async {
-    return await database
-        .rawQuery('SELECT * FROM record WHERE type = "Income" ORDER BY value ');
+  Future<List<Map>> getIncomeRecordByAmount(Database database) async {
+    return await database.rawQuery(
+        'SELECT * FROM record WHERE type = "Income" ORDER BY amount ');
   }
 
   Future<List<Map>> getIncomeRecordByDate(Database database) async {
@@ -156,9 +167,9 @@ class TransactionCubit extends Cubit<TransactionStates> {
         'SELECT * FROM record WHERE type ="Expense" ORDER BY category');
   }
 
-  Future<List<Map>> getExpenseRecordByValue(Database database) async {
+  Future<List<Map>> getExpenseRecordByAmount(Database database) async {
     return await database.rawQuery(
-        'SELECT * FROM record WHERE type = "Expense" ORDER BY value ');
+        'SELECT * FROM record WHERE type = "Expense" ORDER BY amount ');
   }
 
   Future<List<Map>> getExpenseRecordByDate(Database database) async {
@@ -170,13 +181,13 @@ class TransactionCubit extends Cubit<TransactionStates> {
     income = 0;
     expense = 0;
     for (var record in records) {
-      int value = record['value'] is int
-          ? record['value']
-          : int.tryParse(record['value'].toString()) ?? 0;
+      int amount = record['amount'] is int
+          ? record['amount']
+          : int.tryParse(record['amount'].toString()) ?? 0;
       if (record['type'] == "Income") {
-        income += value;
+        income += amount;
       } else {
-        expense += value;
+        expense += amount;
       }
     }
     emit(TransactionUpdated(income, expense, totalPrice, transaction));

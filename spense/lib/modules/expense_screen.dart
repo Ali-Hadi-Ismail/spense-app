@@ -22,8 +22,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       TransactionCubit cubit = TransactionCubit.get(context);
       x = 0;
-      cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((value) {
-        cubit.recordsExpense = value;
+      cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((amount) {
+        cubit.recordsExpense = amount;
         cubit.emit(TransactionUpdated(
             cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));
       });
@@ -58,25 +58,25 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   children: [
                     FilterChip(
                         label: Text("List"),
-                        onSelected: (value) async {
+                        onSelected: (amount) async {
                           setState(() {
                             cubit
                                 .getAllExpenseRecordFromDatabase(
                                     cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
+                                .then((amounts) {
+                              cubit.recordsExpense = amounts;
                             });
                           });
                         }),
                     FilterChip(
                         label: Text("Chart"),
-                        onSelected: (value) {
+                        onSelected: (amount) {
                           setState(() {
                             x = 2;
                           });
                         }),
                     FilterChip(
-                        label: Text("Bar Chart"), onSelected: (value) {}),
+                        label: Text("Bar Chart"), onSelected: (amount) {}),
                   ],
                 ),
               ),
@@ -89,34 +89,34 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   children: [
                     FilterChip(
                         label: Text("By date"),
-                        onSelected: (value) async {
+                        onSelected: (amount) async {
                           setState(() {
                             cubit
                                 .getExpenseRecordByDate(cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
+                                .then((amounts) {
+                              cubit.recordsExpense = amounts;
                             });
                           });
                         }),
                     FilterChip(
-                        label: Text("By value"),
-                        onSelected: (value) async {
+                        label: Text("By amount"),
+                        onSelected: (amount) async {
                           setState(() {
                             cubit
-                                .getExpenseRecordByValue(cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
+                                .getExpenseRecordByAmount(cubit.mydatabase)
+                                .then((amounts) {
+                              cubit.recordsExpense = amounts;
                             });
                           });
                         }),
                     FilterChip(
                         label: Text("By Category"),
-                        onSelected: (value) async {
+                        onSelected: (amount) async {
                           setState(() {
                             cubit
                                 .getExpenseRecordByCategory(cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsExpense = values;
+                                .then((amounts) {
+                              cubit.recordsExpense = amounts;
                             });
                           });
                         }),
@@ -133,7 +133,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                       title: record['title'],
                       date: record['date'],
                       category: record['category'],
-                      value: record['value'],
+                      amount: record['amount'],
                       type: record['type'],
                     );
                   },
@@ -159,7 +159,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 title: record['title'],
                 date: record['date'],
                 category: record['category'],
-                value: record['value'],
+                amount: record['amount'],
                 type: record['type'],
               );
             },
@@ -176,7 +176,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 title: record['title'],
                 date: record['date'],
                 category: record['category'],
-                value: record['value'],
+                amount: record['amount'],
                 type: record['type'],
               );
             },
@@ -195,7 +195,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 title: record['title'],
                 date: record['date'],
                 category: record['category'],
-                value: record['value'],
+                amount: record['amount'],
                 type: record['type'],
               );
             },
@@ -212,7 +212,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             title: record['title'],
             date: record['date'],
             category: record['category'],
-            value: record['value'],
+            amount: record['amount'],
             type: record['type'],
           );
         },
@@ -223,9 +223,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
 class ChartData {
   final String label;
-  final int value;
+  final int amount;
   final Color color;
 
   // Constructor with necessary fields
-  ChartData(this.label, this.value, this.color);
+  ChartData(this.label, this.amount, this.color);
 }

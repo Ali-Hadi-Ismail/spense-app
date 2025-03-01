@@ -22,8 +22,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
     TransactionCubit cubit = TransactionCubit.get(context);
     super.initState();
     x = 0;
-    cubit.getAllIncomeRecordFromDatabase(cubit.mydatabase).then((value) {
-      cubit.recordsExpense = value;
+    cubit.getAllIncomeRecordFromDatabase(cubit.mydatabase).then((amount) {
+      cubit.recordsExpense = amount;
       cubit.emit(TransactionUpdated(
           cubit.income, cubit.expense, cubit.totalPrice, cubit.transaction));
     });
@@ -57,25 +57,25 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   children: [
                     FilterChip(
                         label: Text("List"),
-                        onSelected: (value) async {
+                        onSelected: (amount) async {
                           setState(() {
                             cubit
                                 .getAllIncomeRecordFromDatabase(
                                     cubit.mydatabase)
-                                .then((values) {
-                              cubit.recordsIncome = values;
+                                .then((amounts) {
+                              cubit.recordsIncome = amounts;
                             });
                           });
                         }),
                     FilterChip(
                         label: Text("Chart"),
-                        onSelected: (value) {
+                        onSelected: (amount) {
                           setState(() {
                             x = 2;
                           });
                         }),
                     FilterChip(
-                        label: Text("Bar Chart"), onSelected: (value) {}),
+                        label: Text("Bar Chart"), onSelected: (amount) {}),
                   ],
                 ),
               ),
@@ -88,29 +88,29 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   children: [
                     FilterChip(
                         label: Text("By date"),
-                        onSelected: (value) async {
+                        onSelected: (amount) async {
                           cubit
                               .getIncomeRecordByDate(cubit.mydatabase)
-                              .then((values) {
-                            cubit.recordsIncome = values;
+                              .then((amounts) {
+                            cubit.recordsIncome = amounts;
                           });
                         }),
                     FilterChip(
-                        label: Text("By value"),
-                        onSelected: (value) async {
+                        label: Text("By amount"),
+                        onSelected: (amount) async {
                           cubit
-                              .getIncomeRecordByValue(cubit.mydatabase)
-                              .then((values) {
-                            cubit.recordsIncome = values;
+                              .getIncomeRecordByAmount(cubit.mydatabase)
+                              .then((amounts) {
+                            cubit.recordsIncome = amounts;
                           });
                         }),
                     FilterChip(
                         label: Text("By Category"),
-                        onSelected: (value) async {
+                        onSelected: (amount) async {
                           cubit
                               .getIncomeRecordByCategory(cubit.mydatabase)
-                              .then((values) {
-                            cubit.recordsIncome = values;
+                              .then((amounts) {
+                            cubit.recordsIncome = amounts;
                           });
                         }),
                   ],
@@ -126,7 +126,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                       title: record['title'],
                       date: record['date'],
                       category: record['category'],
-                      value: record['value'],
+                      amount: record['amount'],
                       type: record['type'],
                     );
                   },
@@ -152,7 +152,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 title: record['title'],
                 date: record['date'],
                 category: record['category'],
-                value: record['value'],
+                amount: record['amount'],
                 type: record['type'],
               );
             },
@@ -169,7 +169,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 title: record['title'],
                 date: record['date'],
                 category: record['category'],
-                value: record['value'],
+                amount: record['amount'],
                 type: record['type'],
               );
             },
@@ -188,7 +188,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 title: record['title'],
                 date: record['date'],
                 category: record['category'],
-                value: record['value'],
+                amount: record['amount'],
                 type: record['type'],
               );
             },
@@ -205,7 +205,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             title: record['title'],
             date: record['date'],
             category: record['category'],
-            value: record['value'],
+            amount: record['amount'],
             type: record['type'],
           );
         },
@@ -216,9 +216,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
 class ChartData {
   final String label;
-  final int value;
+  final int amount;
   final Color color;
 
   // Constructor with necessary fields
-  ChartData(this.label, this.value, this.color);
+  ChartData(this.label, this.amount, this.color);
 }

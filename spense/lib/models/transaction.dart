@@ -3,7 +3,7 @@ class Transaction {
   int amount;
   String category;
   String title;
-  DateTime date;
+  int date;
   String type;
 
   Transaction({
@@ -21,7 +21,7 @@ class Transaction {
       'amount': amount,
       'category': category,
       'title': title,
-      'date': date.toIso8601String(),
+      'date': date,
       'type': type
     };
   }

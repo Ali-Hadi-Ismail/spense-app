@@ -29,7 +29,7 @@ class PieChartWithLabels extends StatelessWidget {
           ];
 
           return SizedBox(
-            height: 350,
+            height: 335,
             width: double.infinity,
             child: Stack(
               alignment: Alignment.center,

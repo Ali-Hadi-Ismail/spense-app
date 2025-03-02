@@ -6,7 +6,7 @@ import 'package:spense/shared/cubit/transaction_cubit.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   TransactionCubit transactionCubit = TransactionCubit();
-  await transactionCubit.createDatabase(); // Ensure the database is created
+  await transactionCubit.createDatabase();
 
   runApp(MyApp(transactionCubit: transactionCubit));
 }

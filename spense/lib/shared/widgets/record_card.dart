@@ -6,7 +6,7 @@ class RecordCard extends StatelessWidget {
   final int amount;
   final String category;
   final String title;
-  final String date;
+  final int date;
   final String type;
 
   RecordCard({
@@ -28,6 +28,11 @@ class RecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formatTimestamp(int timestamp) {
+      DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      return DateFormat('HH:mm  dd-MM-yyyy').format(date);
+    }
+
     return SingleChildScrollView(
       child: GestureDetector(
         onLongPress: () {
@@ -84,7 +89,7 @@ class RecordCard extends StatelessWidget {
                   children: [
                     Text("Date                  : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    Text(date,
+                    Text(formatTimestamp(date),
                         style: TextStyle(
                             fontWeight: FontWeight.w500)), // Example date
                   ],

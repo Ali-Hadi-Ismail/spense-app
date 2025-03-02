@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/modules/add_transaction.dart';
@@ -17,34 +18,14 @@ class HomeScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         TransactionCubit cubit = TransactionCubit.get(context);
-        // Fetch all records when the screen is initialized
-        cubit.getAllRecordFromDatabase(cubit.mydatabase).then((amount) {
-          cubit.records = amount;
-          cubit.emit(TransactionUpdated(cubit.income, cubit.expense,
-              cubit.totalPrice, cubit.transaction));
-
-          cubit.calculateIncomeAndExpense();
-        });
         Widget body(int income, int expense) {
           if (cubit.income == 0 && cubit.expense == 0) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/noRecord.svg",
-                    height: 200,
-                    width: 200,
-                  ),
+                  Lottie.asset("assets/animation/noData.json", height: 300),
                   const SizedBox(height: 20),
-                  const Text(
-                    "No Records Found",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'SpaceMono',
-                    ),
-                  ),
                 ],
               ),
             );

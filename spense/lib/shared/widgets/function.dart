@@ -4,12 +4,14 @@ import 'package:spense/layout/home_screen.dart';
 import 'package:spense/modules/add_transaction.dart';
 import 'package:spense/modules/expense_screen.dart';
 import 'package:spense/modules/income_screen.dart';
+import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/shared/widgets/pie_chart_home.dart';
 
 import 'record_card.dart';
 
 SafeArea Body(TransactionCubit cubit, BuildContext context) {
+  InitialFilterByDate(cubit);
   return SafeArea(
     child: Column(
       children: [
@@ -19,12 +21,52 @@ SafeArea Body(TransactionCubit cubit, BuildContext context) {
           indent: 0,
           endIndent: 0,
         ),
-        const Text(
-          "Net Balance",
-          style: TextStyle(
-              fontSize: 24,
-              fontFamily: "SpaceMono",
-              fontWeight: FontWeight.bold),
+        SizedBox(
+          height: 3,
+        ),
+        Row(
+          children: [
+            const SizedBox(width: 8), // Reduced width for performance
+            ElevatedButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.resolveWith(
+                  (states) => Colors.blueGrey,
+                ),
+              ),
+              onPressed: () {},
+              child: PopupMenuButton<String>(
+                onSelected: (value) {
+                  ChangeFilterDate(value, cubit);
+                },
+                itemBuilder: (BuildContext context) {
+                  return const [
+                    PopupMenuItem(value: 'All Time', child: Text('All Time')),
+                    PopupMenuItem(
+                        value: 'This Month', child: Text('This Month')),
+                    PopupMenuItem(
+                        value: 'Last 7 Days', child: Text('Last 7 Days')),
+                  ];
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.calendar_month_rounded,
+                      size: 20,
+                      color: Colors.grey,
+                    ),
+
+                    Text("  ${cubit.Time}",
+                        style: const TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 14)), // Reduced font size
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
         const SafeArea(child: PieChartWithLabels()),
         Row(
@@ -40,6 +82,53 @@ SafeArea Body(TransactionCubit cubit, BuildContext context) {
       ],
     ),
   );
+}
+
+void ChangeFilterDate(String value, TransactionCubit cubit) {
+  if (value == "Last 7 Days") {
+    cubit.Time = value;
+    cubit.getAllRecordLast7Days(cubit.mydatabase).then((amount) {
+      cubit.records = amount;
+
+      cubit.calculateIncomeAndExpense();
+    });
+  } else if (value == "This Month") {
+    cubit.Time = value;
+    cubit.getAllRecordThisMonth(cubit.mydatabase).then((amount) {
+      cubit.records = amount;
+
+      cubit.calculateIncomeAndExpense();
+    });
+  } else {
+    cubit.Time = value;
+    cubit.getAllRecordFromDatabase(cubit.mydatabase).then((amount) {
+      cubit.records = amount;
+
+      cubit.calculateIncomeAndExpense();
+    });
+  }
+}
+
+void InitialFilterByDate(TransactionCubit cubit) {
+  if (cubit.Time == "Last 7 Days") {
+    cubit.getAllRecordLast7Days(cubit.mydatabase).then((amount) {
+      cubit.records = amount;
+
+      cubit.calculateIncomeAndExpense();
+    });
+  } else if (cubit.Time == "This Month") {
+    cubit.getAllRecordThisMonth(cubit.mydatabase).then((amount) {
+      cubit.records = amount;
+
+      cubit.calculateIncomeAndExpense();
+    });
+  } else {
+    cubit.getAllRecordFromDatabase(cubit.mydatabase).then((amount) {
+      cubit.records = amount;
+
+      cubit.calculateIncomeAndExpense();
+    });
+  }
 }
 
 Drawer endDrawer(BuildContext context) {
@@ -386,10 +475,11 @@ ListTile drawerListLite(String text, IconData listIcon, VoidCallback f,
 }
 
 AppBar appBar() {
+  DateTime now = DateTime.now();
   return AppBar(
-    centerTitle: true,
     title: const Text(
       "Spense",
+      textAlign: TextAlign.start,
       style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
@@ -398,6 +488,11 @@ AppBar appBar() {
       ),
     ),
     actions: [
+      Text(
+        "${now.day}-${now.month}-${now.year} ",
+        style: TextStyle(
+            fontSize: 18, color: Colors.black, fontFamily: "SpaceMono"),
+      ),
       Container(
           margin: const EdgeInsets.only(right: 5, top: 5),
           child: IconButton(

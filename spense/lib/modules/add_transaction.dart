@@ -42,9 +42,8 @@ class _AddTransactionState extends State<AddTransaction> {
               if (_formKey.currentState!.validate()) {
                 double amount = double.parse(_amountController.text);
 
-                DateTime now = DateTime.now();
-                String formatedDate =
-                    "${now.hour}:${now.minute}  ${now.day}-${now.month}-${now.year}";
+                int formatedDate = DateTime.now().millisecondsSinceEpoch;
+
                 TransactionCubit.get(context).insertDatabase(
                     category: _categoriesController.text,
                     amount: amount.toInt(),
@@ -58,7 +57,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     amount: amount.toInt(),
                     category: _categoriesController.text,
                     title: _titleController.text,
-                    date: DateTime.now(),
+                    date: formatedDate,
                     type: (cubit.isExpense) ? "Expense" : "Income");
 
                 TransactionCubit.get(context)

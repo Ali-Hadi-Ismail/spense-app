@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
-import 'package:spense/models/transaction.dart';
-import 'package:spense/shared/widgets/pie_chart_home.dart';
 import 'package:spense/shared/widgets/pie_chart_incomeScreen.dart';
 import 'package:spense/shared/widgets/record_card.dart';
 
@@ -29,7 +27,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
           body: Column(
             children: [
               const SizedBox(height: 10),
-              Container(
+              SizedBox(
                 height: 50,
                 width: double.infinity,
                 child: screenTypeOfBody(cubit),
@@ -46,7 +44,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  Expanded ListOfIncome(TransactionCubit cubit) {
+  Expanded listOfIncome(TransactionCubit cubit) {
     return Expanded(
       child: ListView.builder(
         itemCount: cubit.recordsIncome.length,
@@ -65,8 +63,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  Container ListFilter(TransactionCubit cubit) {
-    return Container(
+  SizedBox listFilter(TransactionCubit cubit) {
+    return SizedBox(
       height: 50,
       width: double.infinity,
       child: Row(
@@ -112,7 +110,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             selected: (cubit.bodyType == 0),
             showCheckmark: false,
             selectedColor: Colors.greenAccent,
-            avatar: Icon(
+            avatar: const Icon(
               Icons.list,
               color: Colors.black54,
             ),
@@ -134,7 +132,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             selected: (cubit.bodyType == 1),
             showCheckmark: false,
             selectedColor: Colors.greenAccent,
-            avatar: Icon(
+            avatar: const Icon(
               Icons.donut_large_rounded,
               color: Colors.black54,
             ),
@@ -156,7 +154,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             selected: (cubit.bodyType == 2),
             showCheckmark: false,
             selectedColor: Colors.greenAccent,
-            avatar: Icon(
+            avatar: const Icon(
               Icons.bar_chart,
               color: Colors.black54,
             ),
@@ -182,12 +180,12 @@ class _IncomeScreenState extends State<IncomeScreen> {
       case 0:
         return Column(
           children: [
-            ListFilter(cubit),
-            ListOfIncome(cubit),
+            listFilter(cubit),
+            listOfIncome(cubit),
           ],
         );
       case 1:
-        return PieChartIncomeScreen();
+        return const PieChartIncomeScreen();
       default:
         return const Placeholder();
     }

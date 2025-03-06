@@ -83,8 +83,7 @@ class _PieChartIncomeScreenState extends State<PieChartIncomeScreen> {
                               ),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            padding:
-                                EdgeInsets.all(4), // Padding inside the border
+                            padding: const EdgeInsets.all(4),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -97,14 +96,14 @@ class _PieChartIncomeScreenState extends State<PieChartIncomeScreen> {
                                     shape: BoxShape.circle,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                     width: 8), // Spacing between color and text
                                 Text(
                                   name,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     fontFamily: "SpaceMono",
-                                    color: const Color.fromARGB(255, 8, 8, 8),
+                                    color: Color.fromARGB(255, 8, 8, 8),
                                   ),
                                 ),
                               ],

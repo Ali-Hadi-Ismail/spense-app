@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
-import 'package:spense/models/transaction.dart';
-import 'package:spense/shared/widgets/pie_chart_home.dart';
 import 'package:spense/shared/widgets/pie_chart_expenseScreen.dart'; // Update import
 import 'package:spense/shared/widgets/record_card.dart';
 
@@ -29,7 +27,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           body: Column(
             children: [
               const SizedBox(height: 10),
-              Container(
+              SizedBox(
                 height: 50,
                 width: double.infinity,
                 child: screenTypeOfBody(cubit),
@@ -46,7 +44,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
   }
 
-  Expanded ListOfExpense(TransactionCubit cubit) {
+  Expanded listOfExpense(TransactionCubit cubit) {
     return Expanded(
       child: ListView.builder(
         itemCount: cubit.recordsExpense.length,
@@ -65,8 +63,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     );
   }
 
-  Container ListFilter(TransactionCubit cubit) {
-    return Container(
+  SizedBox listFilter(TransactionCubit cubit) {
+    return SizedBox(
       height: 50,
       width: double.infinity,
       child: Row(
@@ -114,7 +112,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             selected: (cubit.bodyType == 0),
             showCheckmark: false,
             selectedColor: Colors.redAccent, // Changed to red
-            avatar: Icon(
+            avatar: const Icon(
               Icons.list,
               color: Colors.black54,
             ),
@@ -136,7 +134,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             selected: (cubit.bodyType == 1),
             showCheckmark: false,
             selectedColor: Colors.redAccent, // Changed to red
-            avatar: Icon(
+            avatar: const Icon(
               Icons.donut_large_rounded,
               color: Colors.black54,
             ),
@@ -158,7 +156,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             selected: (cubit.bodyType == 2),
             showCheckmark: false,
             selectedColor: Colors.redAccent, // Changed to red
-            avatar: Icon(
+            avatar: const Icon(
               Icons.bar_chart,
               color: Colors.black54,
             ),
@@ -184,12 +182,12 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       case 0:
         return Column(
           children: [
-            ListFilter(cubit),
-            ListOfExpense(cubit),
+            listFilter(cubit),
+            listOfExpense(cubit),
           ],
         );
       case 1:
-        return PieChartExpenseScreen(); // Updated to Expense Pie Chart
+        return const PieChartExpenseScreen();
       default:
         return const Placeholder();
     }

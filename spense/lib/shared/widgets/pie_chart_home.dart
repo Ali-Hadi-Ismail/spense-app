@@ -17,8 +17,6 @@ class PieChartWithLabels extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is TransactionUpdated) {
-          var cubit = TransactionCubit.get(context);
-
           int income = state.income;
           int expense = state.expense;
           int totalPrice = state.totalPrice;
@@ -60,7 +58,7 @@ class PieChartWithLabels extends StatelessWidget {
                         }
                         int percentage =
                             ((data.amount / (income + expense)) * 100).toInt();
-                        return '${percentage}%';
+                        return '$percentage%';
                       },
                     ),
                   ],
@@ -78,7 +76,7 @@ class PieChartWithLabels extends StatelessWidget {
             ),
           );
         } else {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

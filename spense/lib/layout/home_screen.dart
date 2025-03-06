@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
@@ -34,7 +34,7 @@ class HomeScreen extends StatelessWidget {
         }
 
         return Scaffold(
-          key: scaffoldKey, // Assign the scaffoldKey here
+          key: scaffoldKey,
           endDrawer: endDrawer(context),
           appBar: appBar(),
           body: body(cubit.income, cubit.expense),
@@ -47,9 +47,9 @@ class HomeScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddTransaction()));
+                            builder: (context) => const AddTransaction()));
                   },
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 )
               : null,
         );

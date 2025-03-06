@@ -5,7 +5,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
-import 'package:spense/models/transaction.dart';
+
 import 'package:spense/shared/services/currency_exchange_rate.dart';
 
 final _formKey = GlobalKey<FormState>();
@@ -51,18 +51,6 @@ class _AddTransactionState extends State<AddTransaction> {
                     type: (cubit.isExpense) ? "Expense" : "Income",
                     date: formatedDate);
 
-                // using cubit
-                Transaction transactionToBeAdded = Transaction(
-                    id: "a",
-                    amount: amount.toInt(),
-                    category: _categoriesController.text,
-                    title: _titleController.text,
-                    date: formatedDate,
-                    type: (cubit.isExpense) ? "Expense" : "Income");
-
-                TransactionCubit.get(context)
-                    .addTransaction(transactionToBeAdded);
-
                 Navigator.pop(context);
               } else {}
             },
@@ -90,12 +78,12 @@ class _AddTransactionState extends State<AddTransaction> {
             style: const TextStyle(fontSize: 12, fontFamily: "Spacemono"),
             controller: controller,
             validator: (value) {
-              if (type == "Title" && controller.text.length == 0) {
+              if (type == "Title" && controller.text.isEmpty) {
                 return "Required Title";
-              } else if (type == "Category" && controller.text.length == 0) {
+              } else if (type == "Category" && controller.text.isEmpty) {
                 return "Required Category";
               } else if (type == "Amount") {
-                if (controller.text.length == 0) {
+                if (controller.text.isEmpty) {
                   return "Required Amount";
                 } else if (controller.text.length > 6) {
                   return "Amount is too big , please enter lower amount ";
@@ -132,7 +120,7 @@ class _AddTransactionState extends State<AddTransaction> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: Colors.black54),
+                borderSide: const BorderSide(color: Colors.black54),
               ),
             ),
           );
@@ -199,7 +187,7 @@ class _AddTransactionState extends State<AddTransaction> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Material(
                   color: Colors.transparent,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -210,59 +198,59 @@ class _AddTransactionState extends State<AddTransaction> {
           );
         }
 
-        Row currencyInput(Color c) {
-          return Row(
-            children: [
-              const Text(
-                "Currency  :",
-                style: TextStyle(
-                  fontFamily: "Spacemono",
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: FutureBuilder<List<String>>(
-                    future: currencyOptions,
-                    builder: (context, snapshot) {
-                      List<String> currencyOptions = [
-                        "USD",
-                        "EUR",
-                        "GBP",
-                        "JPY",
-                        "AUD",
-                        "CAD",
-                        "CHF",
-                        "CNY",
-                        "SEK",
-                        "NZD"
-                      ];
+        // Row currencyInput(Color c) {
+        //   return Row(
+        //     children: [
+        //       const Text(
+        //         "Currency  :",
+        //         style: TextStyle(
+        //           fontFamily: "Spacemono",
+        //           fontSize: 12,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //       const SizedBox(width: 10),
+        //       Expanded(
+        //         child: FutureBuilder<List<String>>(
+        //             future: currencyOptions,
+        //             builder: (context, snapshot) {
+        //               List<String> currencyOptions = [
+        //                 "USD",
+        //                 "EUR",
+        //                 "GBP",
+        //                 "JPY",
+        //                 "AUD",
+        //                 "CAD",
+        //                 "CHF",
+        //                 "CNY",
+        //                 "SEK",
+        //                 "NZD"
+        //               ];
 
-                      return DropdownButtonFormField<String>(
-                        value: currency,
-                        items: currencyOptions.map((String amount) {
-                          return DropdownMenuItem<String>(
-                            value: amount,
-                            child: Text(amount),
-                          );
-                        }).toList(),
-                        onChanged: (String? newamount) {
-                          setState(() {
-                            currency = newamount;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-            ],
-          );
-        }
+        //               return DropdownButtonFormField<String>(
+        //                 value: currency,
+        //                 items: currencyOptions.map((String amount) {
+        //                   return DropdownMenuItem<String>(
+        //                     value: amount,
+        //                     child: Text(amount),
+        //                   );
+        //                 }).toList(),
+        //                 onChanged: (String? newamount) {
+        //                   setState(() {
+        //                     currency = newamount;
+        //                   });
+        //                 },
+        //                 decoration: InputDecoration(
+        //                   border: OutlineInputBorder(
+        //                     borderRadius: BorderRadius.circular(8),
+        //                   ),
+        //                 ),
+        //               );
+        //             }),
+        //       ),
+        //     ],
+        //   );
+        // }
 
         Row amountInput() {
           return Row(
@@ -354,7 +342,7 @@ class _AddTransactionState extends State<AddTransaction> {
               },
             ),
           ),
-          body: Container(
+          body: SizedBox(
             width: double.infinity,
             height: double.infinity,
             child: Center(

@@ -4,14 +4,14 @@ import 'package:spense/layout/home_screen.dart';
 import 'package:spense/modules/add_transaction.dart';
 import 'package:spense/modules/expense_screen.dart';
 import 'package:spense/modules/income_screen.dart';
-import 'package:spense/shared/cubit/states.dart';
+
 import 'package:spense/shared/cubit/transaction_cubit.dart';
 import 'package:spense/shared/widgets/pie_chart_home.dart';
 
 import 'record_card.dart';
 
 SafeArea Body(TransactionCubit cubit, BuildContext context) {
-  InitialFilterByDate(cubit);
+  initialFilterByDate(cubit);
   return SafeArea(
     child: Column(
       children: [
@@ -21,12 +21,10 @@ SafeArea Body(TransactionCubit cubit, BuildContext context) {
           indent: 0,
           endIndent: 0,
         ),
-        SizedBox(
-          height: 3,
-        ),
+        const SizedBox(height: 3),
         Row(
           children: [
-            const SizedBox(width: 8), // Reduced width for performance
+            const SizedBox(width: 8),
             ElevatedButton(
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.resolveWith(
@@ -36,7 +34,7 @@ SafeArea Body(TransactionCubit cubit, BuildContext context) {
               onPressed: () {},
               child: PopupMenuButton<String>(
                 onSelected: (value) {
-                  ChangeFilterDate(value, cubit);
+                  changeFilterDate(value, cubit);
                 },
                 itemBuilder: (BuildContext context) {
                   return const [
@@ -57,11 +55,9 @@ SafeArea Body(TransactionCubit cubit, BuildContext context) {
                       size: 20,
                       color: Colors.grey,
                     ),
-
-                    Text("  ${cubit.Time}",
+                    Text("  ${cubit.time}",
                         style: const TextStyle(
-                            color: Colors.blueGrey,
-                            fontSize: 14)), // Reduced font size
+                            color: Colors.blueGrey, fontSize: 14)),
                   ],
                 ),
               ),
@@ -84,23 +80,20 @@ SafeArea Body(TransactionCubit cubit, BuildContext context) {
   );
 }
 
-void ChangeFilterDate(String value, TransactionCubit cubit) {
-  if (value == "Last 7 Days") {
-    cubit.Time = value;
+void initialFilterByDate(TransactionCubit cubit) {
+  if (cubit.time == "Last 7 Days") {
     cubit.getAllRecordLast7Days(cubit.mydatabase).then((amount) {
       cubit.records = amount;
 
       cubit.calculateIncomeAndExpense();
     });
-  } else if (value == "This Month") {
-    cubit.Time = value;
+  } else if (cubit.time == "This Month") {
     cubit.getAllRecordThisMonth(cubit.mydatabase).then((amount) {
       cubit.records = amount;
 
       cubit.calculateIncomeAndExpense();
     });
   } else {
-    cubit.Time = value;
     cubit.getAllRecordFromDatabase(cubit.mydatabase).then((amount) {
       cubit.records = amount;
 
@@ -109,20 +102,23 @@ void ChangeFilterDate(String value, TransactionCubit cubit) {
   }
 }
 
-void InitialFilterByDate(TransactionCubit cubit) {
-  if (cubit.Time == "Last 7 Days") {
+void changeFilterDate(String value, TransactionCubit cubit) {
+  if (value == "Last 7 Days") {
+    cubit.time = value;
     cubit.getAllRecordLast7Days(cubit.mydatabase).then((amount) {
       cubit.records = amount;
 
       cubit.calculateIncomeAndExpense();
     });
-  } else if (cubit.Time == "This Month") {
+  } else if (value == "This Month") {
+    cubit.time = value;
     cubit.getAllRecordThisMonth(cubit.mydatabase).then((amount) {
       cubit.records = amount;
 
       cubit.calculateIncomeAndExpense();
     });
   } else {
+    cubit.time = value;
     cubit.getAllRecordFromDatabase(cubit.mydatabase).then((amount) {
       cubit.records = amount;
 
@@ -146,8 +142,8 @@ Drawer endDrawer(BuildContext context) {
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFFFFE6E6), // Very Light Red
-            Color(0xFFFFCCCC), // Softer Red
+            Color(0xFFFFE6E6),
+            Color(0xFFFFCCCC),
           ],
         ),
       ),
@@ -176,7 +172,7 @@ Drawer endDrawer(BuildContext context) {
             "Delete Record",
             Icons.delete,
             () {
-              TextEditingController _id = TextEditingController();
+              TextEditingController id = TextEditingController();
               Navigator.pop(context);
               showDialog(
                   barrierColor: Colors.black45.withOpacity(0.7),
@@ -204,7 +200,7 @@ Drawer endDrawer(BuildContext context) {
                                 child: TextFormField(
                                   style: const TextStyle(
                                       fontSize: 12, fontFamily: "Spacemono"),
-                                  controller: _id,
+                                  controller: id,
                                   decoration: InputDecoration(
                                     hintText:
                                         "Enter Record Id , to delete record",
@@ -220,9 +216,7 @@ Drawer endDrawer(BuildContext context) {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -230,19 +224,17 @@ Drawer endDrawer(BuildContext context) {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text(
-                                  "Cancel",
-                                ),
+                                child: const Text("Cancel"),
                               ),
                               ElevatedButton(
                                   onPressed: () {
                                     TransactionCubit.get(context)
-                                        .deleteRecord(int.parse(_id.text));
+                                        .deleteRecord(int.parse(id.text));
                                   },
-                                  style: ButtonStyle(
+                                  style: const ButtonStyle(
                                       backgroundColor:
                                           WidgetStatePropertyAll(Colors.red)),
-                                  child: Text(
+                                  child: const Text(
                                     "Delete",
                                     style: TextStyle(color: Colors.white),
                                   ))
@@ -386,8 +378,8 @@ Card recordHistoryCard(TransactionCubit cubit) {
 ElevatedButton expenseButton(TransactionCubit cubit, BuildContext context) {
   return ElevatedButton(
     onPressed: () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ExpenseScreen()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const ExpenseScreen()));
     },
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.red,
@@ -430,8 +422,8 @@ FloatingActionButton addTransactionButton(BuildContext context) {
 ElevatedButton incomeButton(TransactionCubit cubit, BuildContext context) {
   return ElevatedButton(
     onPressed: () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => IncomeScreen()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const IncomeScreen()));
     },
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.green,
@@ -490,7 +482,7 @@ AppBar appBar() {
     actions: [
       Text(
         "${now.day}-${now.month}-${now.year} ",
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 18, color: Colors.black, fontFamily: "SpaceMono"),
       ),
       Container(

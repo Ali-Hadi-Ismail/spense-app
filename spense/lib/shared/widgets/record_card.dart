@@ -9,7 +9,7 @@ class RecordCard extends StatelessWidget {
   final int date;
   final String type;
 
-  RecordCard({
+  const RecordCard({
     required this.id,
     required this.amount,
     required this.category,
@@ -53,7 +53,7 @@ class RecordCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Title                : ",
+                    const Text("Title                : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(
                       title,
@@ -67,30 +67,30 @@ class RecordCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Category          : ",
+                    const Text("Category          : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(category,
-                        style: TextStyle(fontWeight: FontWeight.w500)),
+                        style: const TextStyle(fontWeight: FontWeight.w500)),
                   ],
                 ),
                 const SizedBox(height: 3),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Transaction ID : ",
+                    const Text("Transaction ID : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(id.toString(),
-                        style: TextStyle(fontWeight: FontWeight.w500)),
+                        style: const TextStyle(fontWeight: FontWeight.w500)),
                   ],
                 ),
                 const SizedBox(height: 3),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Date                  : ",
+                    const Text("Date                  : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(formatTimestamp(date),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w500)), // Example date
                   ],
                 ),
@@ -98,22 +98,22 @@ class RecordCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Amount            : ",
+                    const Text("Amount            : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(
-                      "\$${amount}",
+                      "\$$amount",
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         color: colorGR(),
                       ),
-                    ), // Example amount
+                    ),
                   ],
                 ),
                 const SizedBox(height: 3),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Type                 : ",
+                    const Text("Type                 : ",
                         style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(
                       type,
@@ -137,18 +137,18 @@ void _showOptions(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
-      return Container(
+      return SizedBox(
         height: 100,
         child: Column(
           children: [
             ListTile(
-              leading: Icon(Icons.edit),
-              title: Text("Edit"),
+              leading: const Icon(Icons.edit),
+              title: const Text("Edit"),
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.delete),
-              title: Text("Delete"),
+              leading: const Icon(Icons.delete),
+              title: const Text("Delete"),
               onTap: () {},
             ),
           ],

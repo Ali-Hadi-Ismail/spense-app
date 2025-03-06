@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spense/shared/cubit/states.dart';
@@ -45,12 +44,12 @@ class TransactionCubit extends Cubit<TransactionStates> {
   List<Map> recordsIncome = [];
   List<Map> recordsExpense = [];
 
-  List<Map> IncomeCategory = [];
+  List<Map> incomeCategory = [];
 
   late Database mydatabase;
   final Completer<void> _dbReadyCompleter = Completer<void>();
 
-  String Time = "All Time";
+  String time = "All Time";
 
 //income screen
 
@@ -155,7 +154,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
   // 7 day
   Future<List<Map>> getAllRecordLast7Days(Database database) async {
     DateTime now = DateTime.now();
-    int sevenDaysAgo = now.subtract(Duration(days: 7)).millisecondsSinceEpoch;
+    int sevenDaysAgo =
+        now.subtract(const Duration(days: 7)).millisecondsSinceEpoch;
     int today = now.millisecondsSinceEpoch;
 
     return await database.rawQuery("""

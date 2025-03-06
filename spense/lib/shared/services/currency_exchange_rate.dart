@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, double>> getExchangeRates() async {
-  final url =
+  const url =
       'http://api.exchangeratesapi.io/v1/latest?access_key=daad3921bed5cf5be8ca05a79ef0393c';
 
   final response = await http.get(Uri.parse(url));

@@ -7,6 +7,7 @@ import 'package:spense/shared/cubit/states.dart';
 import 'package:spense/shared/cubit/transaction_cubit.dart';
 
 import 'package:spense/shared/services/currency_exchange_rate.dart';
+import 'package:spense/shared/widgets/function.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -50,7 +51,7 @@ class _AddTransactionState extends State<AddTransaction> {
                     title: _titleController.text,
                     type: (cubit.isExpense) ? "Expense" : "Income",
                     date: formatedDate);
-
+                initialFilterByDate(cubit);
                 Navigator.pop(context);
               } else {}
             },

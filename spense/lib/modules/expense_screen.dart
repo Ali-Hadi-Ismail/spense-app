@@ -14,33 +14,81 @@ class ExpenseScreen extends StatefulWidget {
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
+  void initState() {
+    super.initState();
+    TransactionCubit cubit = TransactionCubit.get(context);
+    cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((amount) {
+      setState(() {
+        cubit.recordsExpense = amount;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionCubit, TransactionStates>(
       listener: (context, state) {},
       builder: (context, state) {
         TransactionCubit cubit = TransactionCubit.get(context);
-        cubit.getAllExpenseRecordFromDatabase(cubit.mydatabase).then((amount) {
-          cubit.recordsExpense = amount;
-        });
         return Scaffold(
           appBar: customAppBar(),
           body: Column(
             children: [
               const SizedBox(height: 10),
               SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: screenTypeOfBody(cubit),
+                height: 15,
               ),
-              const Divider(),
               Expanded(
-                // Wrap with Expanded
                 child: expenseDataVisualization(cubit),
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  SizedBox listFilter(TransactionCubit cubit) {
+    return SizedBox(
+      height: 50,
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FilterChip(
+            label: const Text("By date"),
+            onSelected: (selected) async {
+              cubit.getExpenseRecordByDate(cubit.mydatabase).then((records) {
+                setState(() {
+                  cubit.recordsExpense = records;
+                });
+              });
+            },
+          ),
+          FilterChip(
+            label: const Text("By amount"),
+            onSelected: (selected) async {
+              cubit.getExpenseRecordByAmount(cubit.mydatabase).then((records) {
+                setState(() {
+                  cubit.recordsExpense = records;
+                });
+              });
+            },
+          ),
+          FilterChip(
+            label: const Text("By category"),
+            onSelected: (selected) async {
+              cubit
+                  .getExpenseRecordByCategory(cubit.mydatabase)
+                  .then((records) {
+                setState(() {
+                  cubit.recordsExpense = records;
+                });
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -59,43 +107,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             type: record['type'],
           );
         },
-      ),
-    );
-  }
-
-  SizedBox listFilter(TransactionCubit cubit) {
-    return SizedBox(
-      height: 50,
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          FilterChip(
-              label: const Text("By date"),
-              onSelected: (amount) async {
-                cubit.getExpenseRecordByDate(cubit.mydatabase).then((amounts) {
-                  cubit.recordsExpense = amounts;
-                });
-              }),
-          FilterChip(
-              label: const Text("By amount"),
-              onSelected: (amount) async {
-                cubit
-                    .getExpenseRecordByAmount(cubit.mydatabase)
-                    .then((amounts) {
-                  cubit.recordsExpense = amounts;
-                });
-              }),
-          FilterChip(
-              label: const Text("By Category"),
-              onSelected: (amount) async {
-                cubit
-                    .getExpenseRecordByCategory(cubit.mydatabase)
-                    .then((amounts) {
-                  cubit.recordsExpense = amounts;
-                });
-              }),
-        ],
       ),
     );
   }

@@ -14,27 +14,30 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   @override
+  void initState() {
+    super.initState();
+    TransactionCubit cubit = TransactionCubit.get(context);
+    cubit.getAllIncomeRecordFromDatabase(cubit.mydatabase).then((amount) {
+      setState(() {
+        cubit.recordsIncome = amount;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionCubit, TransactionStates>(
       listener: (context, state) {},
       builder: (context, state) {
         TransactionCubit cubit = TransactionCubit.get(context);
-        cubit.getAllIncomeRecordFromDatabase(cubit.mydatabase).then((amount) {
-          cubit.recordsIncome = amount;
-        });
         return Scaffold(
           appBar: customAppBar(),
           body: Column(
             children: [
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: screenTypeOfBody(cubit),
+              const SizedBox(
+                height: 15,
               ),
-              const Divider(),
               Expanded(
-                // Wrap with Expanded
                 child: incomeDataVisualization(cubit),
               ),
             ],
@@ -71,28 +74,35 @@ class _IncomeScreenState extends State<IncomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FilterChip(
-              label: const Text("By date"),
-              onSelected: (amount) async {
-                cubit.getIncomeRecordByDate(cubit.mydatabase).then((amounts) {
-                  cubit.recordsIncome = amounts;
+            label: const Text("By date"),
+            onSelected: (selected) async {
+              cubit.getIncomeRecordByDate(cubit.mydatabase).then((records) {
+                setState(() {
+                  cubit.recordsIncome = records;
                 });
-              }),
+              });
+            },
+          ),
           FilterChip(
-              label: const Text("By amount"),
-              onSelected: (amount) async {
-                cubit.getIncomeRecordByAmount(cubit.mydatabase).then((amounts) {
-                  cubit.recordsIncome = amounts;
+            label: const Text("By amount"),
+            onSelected: (selected) async {
+              cubit.getIncomeRecordByAmount(cubit.mydatabase).then((records) {
+                setState(() {
+                  cubit.recordsIncome = records;
                 });
-              }),
+              });
+            },
+          ),
           FilterChip(
-              label: const Text("By Category"),
-              onSelected: (amount) async {
-                cubit
-                    .getIncomeRecordByCategory(cubit.mydatabase)
-                    .then((amounts) {
-                  cubit.recordsIncome = amounts;
+            label: const Text("By category"),
+            onSelected: (selected) async {
+              cubit.getIncomeRecordByCategory(cubit.mydatabase).then((records) {
+                setState(() {
+                  cubit.recordsIncome = records;
                 });
-              }),
+              });
+            },
+          ),
         ],
       ),
     );

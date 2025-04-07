@@ -113,8 +113,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
   }
 
   Future<List<Map>> getIncomeRecordByDate(Database database) async {
-    return await database
-        .rawQuery('SELECT * FROM record WHERE type = "Income" ORDER BY id ');
+    return await database.rawQuery(
+        'SELECT * FROM record WHERE type = "Income" ORDER BY date DESC');
   }
 
   Future<List<Map>> getIncomeRecordByCategory(Database database) async {
@@ -133,8 +133,8 @@ class TransactionCubit extends Cubit<TransactionStates> {
   }
 
   Future<List<Map>> getExpenseRecordByDate(Database database) async {
-    return await database
-        .rawQuery('SELECT * FROM record WHERE type = "Expense" ORDER BY id ');
+    return await database.rawQuery(
+        'SELECT * FROM record WHERE type = "Expense" ORDER BY date DESC');
   }
 
   // last month

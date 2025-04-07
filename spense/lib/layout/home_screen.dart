@@ -35,10 +35,9 @@ class HomeScreen extends StatelessWidget {
 
         return Scaffold(
           key: scaffoldKey,
-          endDrawer: endDrawer(context),
           appBar: appBar(),
           body: body(cubit.income, cubit.expense),
-          drawer: appDrawer(),
+          drawer: appDrawer(context),
           floatingActionButton: (cubit.income == 0 && cubit.expense == 0)
               ? FloatingActionButton(
                   heroTag: "addTransaction",
